@@ -35,7 +35,8 @@ Started 2026-10-05. Linux and native Windows have equal priority. The reference 
 - [x] Document GitHub Releases as the primary channel, npm as an optional Node-based installer, and WinGet as the eventual Windows package-manager channel. Defer crates.io.
 - [x] Add version, archive, package-content and installed-command checks; prepare OIDC publication.
 - [x] Open a reviewable PR and run hosted checks; repair failures with targeted regressions.
-- [ ] Confirm all checks on the final PR commit; make the repository public as authorized, then run CodeQL and enable repository protections.
+- [x] Make the repository public after the private checks pass; enable required PR checks, protected `main`, tag-only releases, secret push protection and private vulnerability reporting.
+- [ ] Confirm all checks, including public CodeQL, on the final PR commit and the merged release commit.
 - [ ] Establish npm package ownership/authentication and configure the trusted publisher. No long-lived publishing token belongs in the repository.
 - [ ] Complete the redacted live-account acceptance checklist on both systems before calling the existing service integration stable.
 - [ ] Publish and verify the release candidate from actual public download/registry channels, then promote to 1.0 after acceptance.

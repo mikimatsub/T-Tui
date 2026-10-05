@@ -20,13 +20,15 @@ The release candidate is intended for acceptance testing. Automated checks use f
 
 You need:
 
-- Rust and Cargo, to build the binary
+- A matching standalone binary from GitHub Releases, or Rust and Cargo to build from source
 - An interactive terminal. The layout works from 50 × 16 cells. 100 × 30 or larger shows the full split view
 - For sharp photos, a terminal with native graphics, such as Foot (Sixel), Kitty, or iTerm2. Other terminals use a truecolor text fallback
 
 ### Install
 
-From this repository:
+For a standalone candidate, download the archive for your system and its `.sha256` file from [GitHub Releases](https://github.com/mikimatsub/T-Tui/releases). Compare its SHA-256 before extracting. Linux archives contain `ttui`; Windows archives contain `ttui.exe`. Run the executable directly or put its directory on your PATH. These downloads do not require Node or Rust.
+
+To build and install from this repository on Linux:
 
 ```sh
 ./scripts/install.sh

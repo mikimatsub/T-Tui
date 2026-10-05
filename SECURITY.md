@@ -1,6 +1,6 @@
 # Security and privacy
 
-Do not post tokens, browser storage, copied cURL requests, profile photos or message content in an issue. Use GitHub's private vulnerability reporting feature when enabled on the public repository. Otherwise contact the maintainer privately before disclosing exploit details; no private contact address is asserted here.
+Do not post tokens, browser storage, copied cURL requests, profile photos or message content in an issue. Private vulnerability reporting is enabled: use **Report a vulnerability** from the repository's [Security page](https://github.com/mikimatsub/T-Tui/security).
 
 This is an unofficial client of a private service. It cannot guarantee future API compatibility, avoid account restrictions or replace Tinder's verification and reporting workflows. Automated tests never access a live account. Browser extraction is experimental and Chromium storage formats are not an authentication contract.
 

@@ -8,9 +8,9 @@ Recorded 2026-10-05 for the work in [PR #1](https://github.com/mikimatsub/T-Tui/
 - Windows Rust suite: 101 passed, one explicitly ignored test that reads personal browser storage. No live credentials were read.
 - Thirteen Python packaging tests pass, covering version mismatches, exact archive-member selection, duplicate/link rejection, checksum tampering, executable modes, license inclusion and stable-only WinGet manifests. One Node launcher test passes.
 - Native Windows ConPTY test passes using the optimized executable: Unicode and emoji, multiline paste, on-disk draft restoration, explicit Ctrl-S demo send, discovery, settings, resize, help and clean terminal exit.
-- Linux hosted terminal, unit, lint and coverage jobs passed on `01328a0`; the final updated commit must pass again. Hosted package checks exercise the real installed npm shim on both operating systems.
+- Linux hosted terminal, unit, lint and coverage jobs passed on `68c9be8`: 99 Rust tests and all 25 terminal checks passed. [CI run 37265761913](https://github.com/mikimatsub/T-Tui/actions/runs/37265761913) also passed native Windows and installed npm-package checks on both systems. The final updated commit must pass again.
 
-The unit-test line coverage baselines before the final input/retry tests were 73.37% on Windows and 73.01% on Linux. These are baselines, not thresholds or claims about every interaction. Coverage does not include terminal-script execution. The command-line entry point, browser integration and external process opening still need acceptance beyond mock tests.
+Unit-test line coverage is 73.02% on Linux at `68c9be8` (4,840 of 6,628 lines); the earlier Windows baseline was 73.37%. These are baselines, not thresholds or claims about every interaction. Coverage does not include terminal-script execution. The command-line entry point, browser integration and external process opening still need acceptance beyond mock tests.
 
 The actual locally packed npm tarball passed Windows install/command checks. WinGet's native validator accepted a generated three-file manifest set without warnings using an explicitly non-installable schema fixture. This does not verify a public installer URL or replace stable-artifact installation testing.
 
@@ -33,4 +33,6 @@ Test fixtures model existing adapter contracts and parser edge cases. They are n
 
 Follow [RELEASING.md](RELEASING.md) for login/import, refresh, restart, pagination, incoming updates, photos, sign-out and account-switching checks on Linux and Windows. Only a deliberately authorized check may send a message or perform another live mutation. Record date, version and terminal without credentials, personal messages or photos.
 
-Repository visibility/protection, registry ownership/trusted publishing, public archive installation, npm provenance and WinGet validation/acceptance must each be verified independently. No live-account acceptance, npm publication or WinGet acceptance has been completed by these automated checks.
+The repository became public after the private checks passed. `main` requires a PR and eleven CI/security checks, including Linux and Windows builds, both package jobs and four CodeQL languages; these rules apply to administrators too. Force pushes and deletion are blocked. The release environment accepts only `v*` tags. GitHub secret scanning, push protection, dependency alerts and private vulnerability reporting are enabled. Public CodeQL and the final commit's checks must pass before merging.
+
+Registry ownership/trusted publishing, public archive installation, npm provenance and WinGet validation/acceptance must each be verified independently. No live-account acceptance, npm publication or WinGet acceptance has been completed by these automated checks. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation.
