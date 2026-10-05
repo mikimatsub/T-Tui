@@ -160,17 +160,13 @@ async fn send_requires_server_acknowledgement_and_accepts_id_alias() {
 async fn http_and_envelope_errors_are_not_successful_empty_lists() {
     let (api, _rx, h) = server(vec![
         (401, vec![]),
-        (429, vec![]),
         json(r#"{"meta":{"status":401},"data":{"matches":[]}}"#),
         json(r#"{}"#),
+        (429, vec![]),
     ]);
     assert!(matches!(
         api.get_matches(20, false).await,
         Err(ApiError::Auth)
-    ));
-    assert!(matches!(
-        api.get_matches(20, false).await,
-        Err(ApiError::RateLimited)
     ));
     assert!(matches!(
         api.get_matches(20, false).await,
@@ -180,7 +176,50 @@ async fn http_and_envelope_errors_are_not_successful_empty_lists() {
         api.get_matches(20, false).await,
         Err(ApiError::Decode(_))
     ));
+    assert!(matches!(
+        api.get_matches(20, false).await,
+        Err(ApiError::RateLimited)
+    ));
+    assert!(matches!(
+        api.get_own_user().await,
+        Err(ApiError::Cooldown(_))
+    ));
     h.join().unwrap();
+}
+
+#[tokio::test]
+async fn ambiguous_swipes_never_become_successful_actions() {
+    // Deliberately invalid protocol examples, not claimed as live API fixtures.
+    let (api, _rx, h) = server(vec![
+        json("{}"),
+        json("null"),
+        json(r#"{"success":false}"#),
+        json(r#"{"match":{}}"#),
+    ]);
+    let rec = Recommendation {
+        user: UserProfile {
+            id: "test-person".into(),
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+    for _ in 0..4 {
+        assert!(api.swipe(&rec, true).await.is_err());
+    }
+    h.join().unwrap();
+}
+
+#[test]
+fn retry_after_accepts_seconds_and_http_dates() {
+    let now = DateTime::parse_from_rfc3339("2026-10-05T12:00:00Z")
+        .unwrap()
+        .with_timezone(&Utc);
+    assert_eq!(retry_delay(Some("90"), now), Duration::from_secs(90));
+    assert_eq!(
+        retry_delay(Some("Mon, 05 Oct 2026 12:02:00 GMT"), now),
+        Duration::from_secs(120)
+    );
+    assert_eq!(retry_delay(Some("invalid"), now), Duration::from_secs(60));
 }
 #[tokio::test]
 async fn discovery_maps_distance_and_embedded_swipe_errors_keep_failure() {

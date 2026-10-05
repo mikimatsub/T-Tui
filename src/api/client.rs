@@ -1,5 +1,5 @@
-use std::sync::{Arc, RwLock};
-use std::time::Duration;
+use std::sync::{Arc, Mutex, RwLock};
+use std::time::{Duration, Instant};
 
 use async_trait::async_trait;
 use chrono::{DateTime, Utc};
@@ -20,6 +20,8 @@ pub enum ApiError {
     Auth,
     #[error("rate limited by the server (HTTP 429). Slowing down.")]
     RateLimited,
+    #[error("server cooldown: wait {0} seconds before trying again")]
+    Cooldown(u64),
     #[error("server error (HTTP {code}): {body}")]
     Status { code: u16, body: String },
     #[error("failed to decode response: {0}")]
@@ -51,6 +53,7 @@ pub struct RealApi {
     http: reqwest::Client,
     base: String,
     auth: Arc<RwLock<AuthState>>,
+    cooldown: Arc<Mutex<Option<Instant>>>,
 }
 
 #[async_trait]
@@ -114,6 +117,7 @@ impl RealApi {
             http,
             auth,
             base: BASE.into(),
+            cooldown: Arc::new(Mutex::new(None)),
         })
     }
 
@@ -157,6 +161,13 @@ impl RealApi {
     }
 
     async fn execute(&self, req: reqwest::RequestBuilder) -> Result<reqwest::Response, ApiError> {
+        if let Some(until) = *self.cooldown.lock().unwrap()
+            && until > Instant::now()
+        {
+            return Err(ApiError::Cooldown(
+                until.saturating_duration_since(Instant::now()).as_secs() + 1,
+            ));
+        }
         let resp = req
             .send()
             .await
@@ -165,13 +176,29 @@ impl RealApi {
         if status.is_success() {
             return Ok(resp);
         }
-        let body = resp.text().await.unwrap_or_default();
-        let body = truncate(&body, 400);
+        if status.as_u16() == 429 {
+            let delay = retry_delay(
+                resp.headers()
+                    .get(reqwest::header::RETRY_AFTER)
+                    .and_then(|value| value.to_str().ok()),
+                Utc::now(),
+            );
+            *self.cooldown.lock().unwrap() = Instant::now().checked_add(delay);
+        }
+        // Response bodies may contain account data. Do not surface them in logs or UI.
+        let body = "Request rejected; check Tinder Web if verification is required.".into();
         match status.as_u16() {
             401 => Err(ApiError::Auth),
             429 => Err(ApiError::RateLimited),
             code => Err(ApiError::Status { code, body }),
         }
+    }
+
+    fn checked<T>(&self, result: Result<T, ApiError>) -> Result<T, ApiError> {
+        if matches!(result, Err(ApiError::RateLimited)) {
+            *self.cooldown.lock().unwrap() = Some(Instant::now() + Duration::from_secs(60));
+        }
+        result
     }
 }
 
@@ -202,7 +229,7 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
-        check_mutation(&value)?;
+        self.checked(check_mutation(&value))?;
         if value.get("match").is_none() || value.get("super_likes").is_none() {
             return Err(ApiError::Decode(
                 "Super Like was not confirmed. Check Tinder before retrying.".into(),
@@ -237,7 +264,7 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
-        check_mutation(&value)?;
+        self.checked(check_mutation(&value))?;
         if value
             .get("boost_id")
             .and_then(|s| s.as_str())
@@ -261,7 +288,7 @@ impl TinderApi for RealApi {
                     .json(&serde_json::json!({"user": update})),
             )
             .await?;
-        mutation_ack(response).await
+        self.checked(mutation_ack(response).await)
     }
     async fn unmatch(&self, match_id: &str) -> Result<(), ApiError> {
         let mut url = url::Url::parse(&self.base).map_err(|e| ApiError::Other(e.to_string()))?;
@@ -271,7 +298,7 @@ impl TinderApi for RealApi {
         let response = self
             .execute(self.http.delete(url).headers(self.headers()))
             .await?;
-        mutation_ack(response).await
+        self.checked(mutation_ack(response).await)
     }
 
     async fn get_recommendations(&self) -> Result<Vec<Recommendation>, ApiError> {
@@ -287,7 +314,7 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
-        let data = envelope_data(env)?;
+        let data = self.checked(envelope_data(env))?;
         Ok(data
             .results
             .into_iter()
@@ -333,6 +360,7 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
+        self.checked(check_mutation(&v))?;
         let status = v
             .get("status")
             .and_then(|s| s.as_u64())
@@ -343,6 +371,22 @@ impl TinderApi for RealApi {
             ));
         }
         let m = v.get("match");
+        let confirmed = if like {
+            m.is_some_and(|value| {
+                value.is_boolean()
+                    || value
+                        .get("_id")
+                        .and_then(|id| id.as_str())
+                        .is_some_and(|id| !id.is_empty())
+            })
+        } else {
+            status.is_some_and(|code| (200..300).contains(&code))
+        };
+        if !confirmed {
+            return Err(ApiError::Decode(
+                "Swipe delivery is uncertain. Check Tinder before trying again.".into(),
+            ));
+        }
         Ok(SwipeResult {
             matched: m.is_some_and(|m| m.as_bool() == Some(true) || m.is_object()),
             new_match: m
@@ -365,7 +409,8 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
-        let user = envelope_data(env)?
+        let user = self
+            .checked(envelope_data(env))?
             .user
             .filter(|u| !u.id.is_empty())
             .ok_or_else(|| ApiError::Decode("no user in profile response".into()))?;
@@ -405,7 +450,7 @@ impl TinderApi for RealApi {
                 .json()
                 .await
                 .map_err(|e| ApiError::Decode(e.to_string()))?;
-            let page = envelope_data(env)?;
+            let page = self.checked(envelope_data(env))?;
             for m in page.matches {
                 if !out.iter().any(|old: &Match| old.id == m.id) {
                     out.push(m);
@@ -445,7 +490,7 @@ impl TinderApi for RealApi {
             .json()
             .await
             .map_err(|e| ApiError::Decode(e.to_string()))?;
-        let mut page = envelope_data(env)?;
+        let mut page = self.checked(envelope_data(env))?;
         page.next_page_token = page.next_page_token.filter(|s| !s.is_empty());
         Ok(page)
     }
@@ -576,13 +621,22 @@ impl TinderApi for RealApi {
     }
 }
 
-fn truncate(s: &str, max: usize) -> String {
-    if s.chars().count() <= max {
-        s.to_string()
-    } else {
-        let t: String = s.chars().take(max).collect();
-        format!("{t}…")
-    }
+fn retry_delay(value: Option<&str>, now: DateTime<Utc>) -> Duration {
+    value
+        .and_then(|value| {
+            value
+                .parse::<u64>()
+                .ok()
+                .map(Duration::from_secs)
+                .or_else(|| {
+                    DateTime::parse_from_rfc2822(value)
+                        .ok()
+                        .and_then(|time| (time.with_timezone(&Utc) - now).to_std().ok())
+                })
+        })
+        .unwrap_or(Duration::from_secs(60))
+        .max(Duration::from_secs(1))
+        .min(Duration::from_secs(365 * 24 * 60 * 60))
 }
 
 fn status_error(code: u16, body: String) -> ApiError {

@@ -1,7 +1,20 @@
 [package]
 name = "ttui"
-version = "0.3.0"
+version = "1.0.0-rc.1"
 edition = "2024"
+description = "A keyboard-first terminal companion for Tinder on Linux and Windows"
+license = "MIT"
+repository = "https://github.com/mikimatsub/T-Tui"
+readme = "README.md"
+publish = false
+
+[profile.release]
+strip = "symbols"
+lto = "thin"
+
+[patch.crates-io]
+# Remove when a published Crossterm release fixes upstream #1072.
+crossterm = { path = "vendor/crossterm" }
 
 [dependencies]
 anyhow = "1.0.104"
@@ -22,3 +35,6 @@ url = "2.5.8"
 uuid = { version = "1.26.1", features = ["v4", "serde"] }
 ratatui-image = { version = "11.0.8", default-features = false, features = ["crossterm"] }
 rustix = { version = "0.38.44", features = ["event", "stdio", "termios"] }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.61.2", features = ["Win32_Foundation", "Win32_Security_Cryptography", "Win32_UI_Shell", "Win32_UI_WindowsAndMessaging"] }

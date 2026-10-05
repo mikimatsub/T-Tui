@@ -68,6 +68,7 @@ impl PhotoPipeline {
         tx: mpsc::UnboundedSender<PhotoReady>,
     ) -> Self {
         let _ = std::fs::create_dir_all(&disk_dir);
+        let _ = crate::cache::prune(&disk_dir, false);
         Self {
             graphics: crate::graphics::Graphics::default(),
             api,
@@ -236,10 +237,24 @@ async fn run_load(
         let img =
             images::render(&bytes, w, h).ok_or_else(|| "image decode/resize failed".to_string())?;
         let temp = cache_path.with_extension(format!("{}.tmp", uuid::Uuid::new_v4()));
-        if std::fs::write(&temp, &bytes).is_ok() {
+        let write = (|| -> std::io::Result<()> {
+            use std::io::Write;
+            let mut options = std::fs::OpenOptions::new();
+            options.write(true).create_new(true);
+            #[cfg(unix)]
+            {
+                use std::os::unix::fs::OpenOptionsExt;
+                options.mode(0o600);
+            }
+            options.open(&temp)?.write_all(&bytes)
+        })();
+        if write.is_ok() {
             let _ = std::fs::rename(&temp, &cache_path);
         }
         let _ = std::fs::remove_file(temp);
+        if let Some(dir) = cache_path.parent() {
+            let _ = crate::cache::prune(dir, false);
+        }
         Ok(Arc::new(img))
     })
     .await

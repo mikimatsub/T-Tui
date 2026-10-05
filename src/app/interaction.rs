@@ -544,21 +544,9 @@ impl App {
     }
     fn open_web(&mut self, url: &'static str) {
         self.spawn(async move {
-            let result = tokio::task::spawn_blocking(move || {
-                std::process::Command::new(if cfg!(target_os = "macos") {
-                    "open"
-                } else {
-                    "xdg-open"
-                })
-                .arg(url)
-                .stdin(std::process::Stdio::null())
-                .stdout(std::process::Stdio::null())
-                .stderr(std::process::Stdio::null())
-                .status()
-            })
-            .await;
+            let result = tokio::task::spawn_blocking(move || crate::platform::open(url)).await;
             super::AppEvent::Notice(match result {
-                Ok(Ok(status)) if status.success() => "Opened Tinder in your browser.".into(),
+                Ok(Ok(())) => "Opened Tinder in your browser.".into(),
                 _ => format!("Could not open a browser. Visit {url}"),
             })
         });

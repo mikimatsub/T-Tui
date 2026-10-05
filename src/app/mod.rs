@@ -146,6 +146,8 @@ pub struct App {
     pub unread: HashMap<String, usize>,
     pub last_msg: HashMap<String, String>,
     pub matches_loading: bool,
+    pub inbox_limit: u32,
+    draft_changed: Option<Instant>,
     pub status: Option<String>,
     pub toasts: Vec<Toast>,
     pub last_sync: Option<Instant>,
@@ -167,6 +169,7 @@ pub struct App {
     pub help: bool,
     pub help_scroll: usize,
     pub confirm_signout: bool,
+    pub signout_error: Option<String>,
     pub refreshing: bool,
     pub discovery: VecDeque<Recommendation>,
     pub discovery_loading: bool,
@@ -220,6 +223,8 @@ impl App {
             confirm_unmatch: None,
             unmatching: None,
             removed_matches: HashSet::new(),
+            inbox_limit: config.match_count,
+            draft_changed: None,
             config,
             api,
             photos,
@@ -252,6 +257,7 @@ impl App {
             help: false,
             help_scroll: 0,
             confirm_signout: false,
+            signout_error: None,
             refreshing: false,
             discovery: VecDeque::new(),
             discovery_loading: false,
@@ -362,6 +368,11 @@ impl App {
         if let Err(e) = saved.save() {
             self.toasts
                 .push(toast(&format!("Could not save settings: {e}")));
+            if self.draft_changed.is_some() {
+                self.draft_changed = Some(Instant::now() + Duration::from_secs(5));
+            }
+        } else {
+            self.draft_changed = None;
         }
     }
     fn stash_chat(&mut self) {
@@ -582,6 +593,7 @@ impl App {
                 match ev.code {
                     KeyCode::Char('q') => return true,
                     KeyCode::Char('/') => self.searching = true,
+                    KeyCode::Char('L') => self.load_more_matches(),
                     KeyCode::Esc => {
                         self.search.clear();
                         self.select_first_result();
@@ -742,6 +754,8 @@ impl App {
         self.cursor += s.len();
     }
     fn chat_key(&mut self, ev: KeyEvent) {
+        // Windows console events do not preserve bracketed-paste boundaries.
+        // Treat plain CR/LF as draft text; sending requires Ctrl-S or the Send button.
         let ctrl = ev.modifiers.contains(KeyModifiers::CONTROL);
         if ctrl {
             match ev.code {
@@ -754,7 +768,10 @@ impl App {
                 KeyCode::Char('p') => self.selected_profile(),
                 KeyCode::Char('r') => self.retry_failed(),
                 KeyCode::Char('x') => self.activate(Action::Unmatch),
+                KeyCode::Char('s') if cfg!(windows) => self.send(),
                 KeyCode::Char('s') => self.open_settings(),
+                KeyCode::Char('j' | 'm') if cfg!(windows) => self.insert_text("\n"),
+                KeyCode::Enter if cfg!(windows) => self.insert_text("\n"),
                 _ => {}
             }
             return;
@@ -766,7 +783,8 @@ impl App {
                 self.screen = Screen::Matches;
             }
             KeyCode::Enter
-                if ev.modifiers.contains(KeyModifiers::SHIFT)
+                if cfg!(windows)
+                    || ev.modifiers.contains(KeyModifiers::SHIFT)
                     || ev.modifiers.contains(KeyModifiers::ALT) =>
             {
                 self.insert_text("\n")
@@ -992,6 +1010,10 @@ impl App {
         self.spawn(async move { AppEvent::LoginDone(api.get_own_user().await) });
     }
     pub fn start_browser_login(&mut self) {
+        if self.config.mock {
+            self.login.error = Some("Browser login is unavailable in offline demo mode.".into());
+            return;
+        }
         if self.login.busy {
             return;
         }
@@ -1024,7 +1046,28 @@ impl App {
         self.status = None;
     }
     fn finish_login(&mut self, own: UserProfile) {
-        if self.own.as_ref().is_some_and(|old| old.id != own.id) {
+        self.adopt_identity(&own);
+        self.own = Some(own);
+        self.screen = Screen::Matches;
+        self.status = None;
+        self.login.error = None;
+        self.login.busy = false;
+        self.login.browser_waiting = false;
+        self.save_config();
+        self.load_matches();
+        self.start_poller();
+    }
+
+    fn adopt_identity(&mut self, own: &UserProfile) {
+        if self.own.as_ref().is_some_and(|old| old.id != own.id)
+            || self
+                .config
+                .user_id
+                .as_ref()
+                .is_some_and(|old| old != &own.id)
+        {
+            self.inbox_limit = self.config.match_count;
+            self.draft_changed = None;
             self.account = account::AccountEditor::default();
             self.matches.clear();
             self.match_sel = 0;
@@ -1052,17 +1095,7 @@ impl App {
             self.removed_matches.clear();
         }
 
-        self.config.user_id = Some(own.id.clone());
-        self.config.user_name = Some(own.name.clone());
-        self.own = Some(own);
-        self.screen = Screen::Matches;
-        self.status = None;
-        self.login.error = None;
-        self.login.busy = false;
-        self.login.browser_waiting = false;
-        self.save_config();
-        self.load_matches();
-        self.start_poller();
+        self.config.set_identity(own.id.clone(), own.name.clone());
     }
     pub fn start_refresh(&mut self) {
         if self.refreshing {
@@ -1112,6 +1145,22 @@ impl App {
         self.login.busy = false;
     }
     pub fn sign_out(&mut self) {
+        let mut cleared = self.config.clone();
+        if let Some(theme) = self.theme_original {
+            cleared.theme = theme;
+        }
+        cleared.clear_session();
+        if let Err(error) = cleared.save() {
+            self.signout_error = Some(format!(
+                "Sign-out failed: {error}. The saved session remains. Fix file access and retry, or cancel."
+            ));
+            self.confirm_signout = true;
+            return;
+        }
+        self.config = cleared;
+        self.inbox_limit = self.config.match_count;
+        self.draft_changed = None;
+        self.signout_error = None;
         self.generation += 1;
         self.stop_poller();
         for h in self.tasks.drain(..) {
@@ -1137,7 +1186,6 @@ impl App {
         self.theme_original = None;
         self.config.drafts.clear();
         self.config.read_at.clear();
-        self.save_config();
         self.own = None;
         self.matches.clear();
         self.messages.clear();
@@ -1192,6 +1240,7 @@ impl App {
             }
             5 => {
                 cycle(&mut self.config.match_count, &[20, 40, 60, 100]);
+                self.inbox_limit = self.config.match_count;
                 self.load_matches();
             }
             6 => cycle(&mut self.config.photo_width_cells, &[30, 46, 60]),
@@ -1221,8 +1270,20 @@ impl App {
         }
         self.matches_loading = true;
         let api = self.api.clone();
-        let count = self.config.match_count;
+        let count = self.inbox_limit;
         self.spawn(async move { AppEvent::MatchesLoaded(api.get_matches(count, false).await) });
+    }
+    pub fn load_more_matches(&mut self) {
+        if self.matches_loading {
+            return;
+        }
+        if self.inbox_limit >= 1000 {
+            self.toasts
+                .push(toast("The session limit is 1,000 conversations."));
+            return;
+        }
+        self.inbox_limit = (self.inbox_limit + 100).min(1000);
+        self.load_matches();
     }
     pub fn open_discovery(&mut self) {
         self.screen = Screen::Discover;
@@ -1294,6 +1355,7 @@ impl App {
                 self.matches_loading = false;
                 match result {
                     Ok((own, matches)) => {
+                        self.adopt_identity(&own);
                         self.own = Some(own);
                         self.replace_matches(matches);
                         self.status = None;
@@ -1858,23 +1920,7 @@ impl App {
                     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
                     let path = dir.join(format!("{}.{}", uuid::Uuid::new_v4(), ext));
                     std::fs::write(&path, bytes).map_err(|e| e.to_string())?;
-                    let program = if cfg!(target_os = "macos") {
-                        "open"
-                    } else {
-                        "xdg-open"
-                    };
-                    let status = std::process::Command::new(program)
-                        .arg(path)
-                        .stdin(std::process::Stdio::null())
-                        .stdout(std::process::Stdio::null())
-                        .stderr(std::process::Stdio::null())
-                        .status()
-                        .map_err(|e| e.to_string())?;
-                    if status.success() {
-                        Ok(())
-                    } else {
-                        Err("The photo viewer could not open the image.".into())
-                    }
+                    crate::platform::open(path).map_err(|e| e.to_string())
                 })
                 .await
                 .map_err(|e| e.to_string())?
@@ -1885,6 +1931,21 @@ impl App {
     }
     pub fn tick(&mut self) {
         self.toasts.retain(|t| t.until > Instant::now());
+        if self.screen == Screen::Chat
+            && let Some(id) = &self.chat_match_id
+        {
+            let previous = self.config.drafts.get(id).map(String::as_str).unwrap_or("");
+            if previous != self.input {
+                self.config.drafts.insert(id.clone(), self.input.clone());
+                self.draft_changed = Some(Instant::now());
+            }
+        }
+        if self
+            .draft_changed
+            .is_some_and(|time| time.elapsed() >= Duration::from_millis(750))
+        {
+            self.save_config();
+        }
     }
 }
 

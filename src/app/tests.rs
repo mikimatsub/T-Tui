@@ -92,6 +92,44 @@ async fn ordinary_typing_and_paste_never_trigger_navigation_or_sends() {
     assert!(app.input.is_empty());
     assert_eq!(app.cursor, 0);
 }
+
+#[cfg(windows)]
+#[tokio::test]
+async fn windows_multiline_keys_never_send_until_control_s() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let original_count = app.messages.len();
+    app.handle_paste("Line one");
+    key(&mut app, KeyCode::Enter);
+    assert_eq!(app.input, "Line one\n");
+    assert_eq!(app.messages.len(), original_count);
+    app.handle_paste("Line two 日本語");
+    control(&mut app, 'j');
+    assert_eq!(app.input, "Line one\nLine two 日本語\n");
+    assert_eq!(app.messages.len(), original_count);
+    app.handle_paste("Line three");
+    control(&mut app, 'm');
+    app.handle_paste("Line four");
+    app.handle_key(KeyEvent::new(KeyCode::Enter, KeyModifiers::CONTROL));
+    app.handle_paste("Line five 🦀");
+    let expected = "Line one\nLine two 日本語\nLine three\nLine four\nLine five 🦀";
+    assert_eq!(app.input, expected);
+    assert_eq!(app.messages.len(), original_count);
+    assert_eq!(app.screen, Screen::Chat);
+
+    control(&mut app, 's');
+    assert!(app.input.is_empty());
+    assert_eq!(app.messages.len(), original_count + 1);
+    pump_until(&mut app, &mut rx, |a| {
+        a.messages
+            .iter()
+            .any(|message| message.m.message == expected && !message.pending && !message.failed)
+    })
+    .await;
+    assert_eq!(app.messages.len(), original_count + 1);
+    assert_eq!(app.messages.last().unwrap().m.message, expected);
+    assert_eq!(app.screen, Screen::Chat);
+}
 #[tokio::test]
 async fn drafts_survive_navigation_and_restart_configuration() {
     let (mut app, mut rx) = fixture().await;
@@ -273,6 +311,207 @@ async fn sign_out_ignores_queued_work_and_clears_credentials() {
     assert!(app.matches.is_empty());
     assert_eq!(app.screen, Screen::Login);
     assert!(app.config.auth_token.is_none());
+}
+
+#[tokio::test]
+async fn sign_out_save_failure_stays_visible_and_retry_clears_saved_session() {
+    let (mut app, _) = fixture().await;
+    let path = app.config.storage_path.clone().unwrap();
+    let root = path.parent().unwrap().to_path_buf();
+    app.config.auth_token = Some("synthetic-auth".into());
+    app.config.refresh_token = Some("synthetic-refresh".into());
+    app.config.device_id = Some("synthetic-device".into());
+    app.config
+        .drafts
+        .insert("private-chat".into(), "Unsent draft".into());
+    app.config.save().unwrap();
+    let original_disk = std::fs::read(&path).unwrap();
+    let generation = app.generation;
+    let match_count = app.matches.len();
+    // A directory cannot be replaced by a config file, on either supported OS.
+    let blocked_path = root.join("blocked-config");
+    std::fs::create_dir(&blocked_path).unwrap();
+    app.config.storage_path = Some(blocked_path);
+    app.sign_out();
+    app.tick();
+    assert!(app.confirm_signout);
+    assert_eq!(app.generation, generation);
+    assert_eq!(app.screen, Screen::Matches);
+    assert_eq!(app.config.auth_token.as_deref(), Some("synthetic-auth"));
+    assert_eq!(app.matches.len(), match_count);
+    assert_eq!(std::fs::read(&path).unwrap(), original_disk);
+    assert!(frame(&app, 120, 36).contains("Sign-out failed"));
+    // The failure is a persistent modal, not an expiring toast.
+    app.toasts.clear();
+    app.tick();
+    assert!(frame(&app, 120, 36).contains("Sign-out failed"));
+
+    app.config.storage_path = Some(path.clone());
+    key(&mut app, KeyCode::Enter);
+    assert_eq!(app.screen, Screen::Login);
+    assert!(app.signout_error.is_none());
+    assert!(!app.confirm_signout);
+    assert!(app.own.is_none());
+    assert!(app.matches.is_empty());
+    assert_eq!(app.generation, generation + 1);
+    let saved: Config = serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap();
+    assert!(saved.auth_token.is_none());
+    assert!(saved.refresh_token.is_none());
+    assert!(saved.device_id.is_none());
+    assert!(saved.user_id.is_none());
+    assert!(saved.drafts.is_empty());
+    drop(app);
+    std::fs::remove_dir_all(root).unwrap();
+}
+
+#[tokio::test]
+async fn persisted_identity_switch_clears_cached_state_before_own_profile_exists() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let old_id = app.chat_match_id.clone().unwrap();
+    app.handle_paste("Previous account draft");
+    app.stash_chat();
+    app.config.pinned.insert(old_id.clone());
+    app.config.read_at.insert(old_id.clone(), 123);
+    app.unread.insert(old_id.clone(), 2);
+    app.own = None;
+    app.adopt_identity(&UserProfile {
+        id: "another-account".into(),
+        name: "Another user".into(),
+        ..Default::default()
+    });
+    assert_eq!(app.config.user_id.as_deref(), Some("another-account"));
+    assert!(app.config.drafts.is_empty());
+    assert!(app.config.pinned.is_empty());
+    assert!(app.config.read_at.is_empty());
+    assert!(app.matches.is_empty());
+    assert!(app.threads.is_empty());
+    assert!(app.messages.is_empty());
+    assert!(app.unread.is_empty());
+    assert!(app.chat_match_id.is_none());
+    assert!(app.input.is_empty());
+    assert_eq!(app.cursor, 0);
+}
+
+#[tokio::test]
+async fn adopting_same_identity_retains_chat_and_account_state() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let id = app.chat_match_id.clone().unwrap();
+    app.handle_paste("Keep this draft");
+    app.stash_chat();
+    app.config.pinned.insert(id.clone());
+    app.config.read_at.insert(id.clone(), 456);
+    let message_count = app.messages.len();
+    let match_count = app.matches.len();
+    let mut own = app.own.clone().unwrap();
+    own.name = "Updated display name".into();
+    app.adopt_identity(&own);
+    assert_eq!(
+        app.config.user_name.as_deref(),
+        Some("Updated display name")
+    );
+    assert_eq!(app.config.drafts[&id], "Keep this draft");
+    assert!(app.config.pinned.contains(&id));
+    assert_eq!(app.config.read_at[&id], 456);
+    assert_eq!(app.matches.len(), match_count);
+    assert_eq!(app.messages.len(), message_count);
+    assert_eq!(app.threads[&id].len(), message_count);
+    assert_eq!(app.chat_match_id.as_deref(), Some(id.as_str()));
+    assert_eq!(app.input, "Keep this draft");
+}
+
+#[tokio::test]
+async fn draft_save_debounces_changes_and_persists_after_quiet_period() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let id = app.chat_match_id.clone().unwrap();
+    let path = app.config.storage_path.clone().unwrap();
+    app.config.save().unwrap();
+    let read_saved =
+        || -> Config { serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap() };
+    app.handle_paste("First draft");
+    app.tick();
+    assert_eq!(app.config.drafts[&id], "First draft");
+    assert_ne!(
+        read_saved().drafts.get(&id).map(String::as_str),
+        Some("First draft")
+    );
+    assert!(app.draft_changed.is_some());
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.handle_paste(" plus 日本語");
+    app.tick();
+    // A new edit resets even an already elapsed previous debounce deadline.
+    assert_ne!(
+        read_saved().drafts.get(&id).map(String::as_str),
+        Some("First draft plus 日本語")
+    );
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.tick();
+    assert_eq!(read_saved().drafts[&id], "First draft plus 日本語");
+    assert!(app.draft_changed.is_none());
+    app.input.clear();
+    app.cursor = 0;
+    app.tick();
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.tick();
+    assert_eq!(read_saved().drafts[&id], "");
+    assert!(app.draft_changed.is_none());
+}
+
+#[tokio::test]
+async fn load_more_matches_guards_reentry_and_caps_the_session_limit() {
+    let (mut app, mut rx) = fixture().await;
+    let configured_limit = app.config.match_count;
+    let initial = app.inbox_limit;
+    app.load_more_matches();
+    assert_eq!(app.inbox_limit, initial + 100);
+    assert!(app.matches_loading);
+    app.load_more_matches();
+    assert_eq!(app.inbox_limit, initial + 100);
+    pump_until(&mut app, &mut rx, |a| !a.matches_loading).await;
+
+    app.inbox_limit = 999;
+    app.load_more_matches();
+    assert_eq!(app.inbox_limit, 1000);
+    pump_until(&mut app, &mut rx, |a| !a.matches_loading).await;
+    for limit in [1000, 1001] {
+        app.inbox_limit = limit;
+        app.load_more_matches();
+        assert_eq!(app.inbox_limit, limit);
+        assert!(!app.matches_loading);
+    }
+    assert_eq!(app.config.match_count, configured_limit);
+}
+
+#[tokio::test]
+async fn failed_draft_save_keeps_pending_retry_until_the_disk_write_succeeds() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let id = app.chat_match_id.clone().unwrap();
+    let path = app.config.storage_path.clone().unwrap();
+    app.config.save().unwrap();
+    let original_disk = std::fs::read(&path).unwrap();
+    let blocked = path.parent().unwrap().join("blocked-draft");
+    std::fs::create_dir(&blocked).unwrap();
+    app.config.storage_path = Some(blocked);
+    app.handle_paste("Retry this draft 日本語");
+    app.tick();
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.tick();
+    assert_eq!(std::fs::read(&path).unwrap(), original_disk);
+    assert_eq!(app.config.drafts[&id], "Retry this draft 日本語");
+    assert!(app.draft_changed.is_some());
+    let toast_count = app.toasts.len();
+    app.tick();
+    assert_eq!(app.toasts.len(), toast_count);
+
+    app.config.storage_path = Some(path.clone());
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.tick();
+    let saved: Config = serde_json::from_slice(&std::fs::read(path).unwrap()).unwrap();
+    assert_eq!(saved.drafts[&id], "Retry this draft 日本語");
+    assert!(app.draft_changed.is_none());
 }
 #[tokio::test]
 async fn pagination_merges_and_stops_at_server_end() {

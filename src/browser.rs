@@ -28,6 +28,7 @@ impl BrowserCredentials {
 /// Discovers candidate Chromium-based browser profile directories on the current system.
 pub fn candidate_profile_dirs() -> Vec<PathBuf> {
     let mut dirs = Vec::new();
+    #[cfg(unix)]
     let home = match dirs::home_dir() {
         Some(h) => h,
         None => return dirs,
@@ -131,26 +132,37 @@ pub fn extract_from_profile(profile_dir: &Path) -> Option<BrowserCredentials> {
     })
 }
 
-/// Scans all candidate browser profiles and returns the freshest credentials found.
+/// Experimental extraction. Never silently select between browser profiles.
 pub fn extract_freshest_credentials() -> Option<BrowserCredentials> {
-    let mut best: Option<BrowserCredentials> = None;
+    selected_profile()
+        .ok()
+        .and_then(|path| extract_from_profile(&path))
+}
 
-    for profile in candidate_profile_dirs() {
-        if let Some(creds) = extract_from_profile(&profile)
-            && creds.is_usable()
-        {
-            match &best {
-                None => best = Some(creds),
-                Some(prev) => {
-                    if creds.timestamp > prev.timestamp {
-                        best = Some(creds);
-                    }
-                }
-            }
-        }
+fn select_profile(paths: Vec<PathBuf>) -> Result<PathBuf, String> {
+    let candidates: Vec<_> = paths
+        .into_iter()
+        .filter(|path| {
+            path.join("IndexedDB/https_tinder.com_0.indexeddb.leveldb")
+                .is_dir()
+        })
+        .collect();
+    match candidates.as_slice() {
+        [path] => Ok(path.clone()),
+        [] => Err("No supported Chromium Tinder profile found. Use session import, or set TTUI_BROWSER_PROFILE to the intended profile directory.".into()),
+        _ => Err("Multiple Tinder browser profiles found. Set TTUI_BROWSER_PROFILE to the intended profile directory, or use session import.".into()),
     }
+}
 
-    best
+fn selected_profile() -> Result<PathBuf, String> {
+    if let Some(path) = std::env::var_os("TTUI_BROWSER_PROFILE") {
+        let path = PathBuf::from(path);
+        if path.is_absolute() && path.is_dir() {
+            return Ok(path);
+        }
+        return Err("TTUI_BROWSER_PROFILE must be an existing absolute profile directory.".into());
+    }
+    select_profile(candidate_profile_dirs())
 }
 
 fn scan_indexeddb(dir: &Path) -> Option<(Option<String>, Option<String>, u64)> {
@@ -230,12 +242,8 @@ fn scan_indexeddb(dir: &Path) -> Option<(Option<String>, Option<String>, u64)> {
                     && (ts >= best_ts || (best_auth.is_none() && best_refresh.is_none()))
                 {
                     best_ts = ts;
-                    if tok.is_some() {
-                        best_auth = tok;
-                    }
-                    if ref_tok.is_some() {
-                        best_refresh = ref_tok;
-                    }
+                    best_auth = tok;
+                    best_refresh = ref_tok;
                 }
             }
         }
@@ -310,46 +318,7 @@ fn find_uuid(bytes: &[u8]) -> Option<String> {
 
 /// Opens the system browser to https://tinder.com
 pub fn open_browser_to_tinder() -> std::io::Result<()> {
-    let url = "https://tinder.com";
-
-    #[cfg(target_os = "macos")]
-    {
-        std::process::Command::new("open").arg(url).spawn()?;
-        return Ok(());
-    }
-
-    #[cfg(target_os = "windows")]
-    {
-        std::process::Command::new("cmd")
-            .args(["/c", "start", url])
-            .spawn()?;
-        return Ok(());
-    }
-
-    #[cfg(target_os = "linux")]
-    {
-        if std::process::Command::new("xdg-open")
-            .arg(url)
-            .spawn()
-            .is_ok()
-        {
-            return Ok(());
-        }
-        for cmd in &[
-            "google-chrome-stable",
-            "google-chrome",
-            "chromium",
-            "firefox",
-        ] {
-            if std::process::Command::new(cmd).arg(url).spawn().is_ok() {
-                return Ok(());
-            }
-        }
-        Err(std::io::Error::new(
-            std::io::ErrorKind::NotFound,
-            "No compatible browser launcher (xdg-open, chrome, etc.) found",
-        ))
-    }
+    crate::platform::open("https://tinder.com")
 }
 
 /// Helper to verify or renew credentials with TinderApi.
@@ -394,11 +363,12 @@ pub async fn poll_browser_login(
     baseline_ts: u64,
     timeout: Duration,
 ) -> Result<(String, String, Option<String>, UserProfile), String> {
+    let profile = selected_profile()?;
     let start = std::time::Instant::now();
     let mut check_interval = tokio::time::interval(Duration::from_millis(1000));
     check_interval.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
 
-    let mut tried_initial = false;
+    let mut tried = None;
 
     loop {
         check_interval.tick().await;
@@ -407,25 +377,20 @@ pub async fn poll_browser_login(
             return Err("Browser login timed out after 3 minutes. Please try again.".into());
         }
 
-        if let Some(creds) = extract_freshest_credentials() {
-            let should_try = if !tried_initial {
-                tried_initial = true;
-                true
-            } else {
-                creds.timestamp > baseline_ts
-            };
-
-            if should_try {
-                match verify_or_renew_credentials(api.as_ref(), creds).await {
-                    Ok(res) => return Ok(res),
-                    Err(ApiError::Network(_)) => {
-                        // Network error during verification, keep polling
-                        continue;
-                    }
-                    Err(_) => {
-                        // If initial attempt failed, loop will wait for creds with timestamp > baseline_ts
-                        continue;
-                    }
+        if let Some(creds) = extract_from_profile(&profile)
+            && tried.as_ref() != Some(&creds)
+            && (tried.is_none() || creds.timestamp > baseline_ts)
+        {
+            tried = Some(creds.clone());
+            match verify_or_renew_credentials(api.as_ref(), creds).await {
+                Ok(res) => return Ok(res),
+                Err(ApiError::Network(_)) => {
+                    // Network error during verification, keep polling
+                    continue;
+                }
+                Err(_) => {
+                    // If initial attempt failed, loop will wait for creds with timestamp > baseline_ts
+                    continue;
                 }
             }
         }
@@ -465,6 +430,60 @@ mod tests {
     }
 
     #[test]
+    fn newest_record_never_inherits_another_records_credentials() {
+        let dir = std::env::temp_dir().join(format!("ttui-idb-coherence-{}", uuid::Uuid::new_v4()));
+        std::fs::create_dir_all(&dir).unwrap();
+        // These synthetic records test parser isolation, not Chromium compatibility.
+        for (auth, refresh) in [(Some("new-auth"), None), (None, Some("new-refresh"))] {
+            let old = r#"{"authToken":"old-auth","refreshToken":"old-refresh","__PERSIST__":{"timestamp":100}}"#;
+            let newest = format!(
+                r#"{{"authToken":{},"refreshToken":{},"__PERSIST__":{{"timestamp":300}}}}"#,
+                serde_json::to_string(&auth).unwrap(),
+                serde_json::to_string(&refresh).unwrap()
+            );
+            // The old record occurs last to prove selection uses its timestamp.
+            std::fs::write(dir.join("000001.log"), format!("{newest}\0{old}")).unwrap();
+            std::fs::write(
+                dir.join("ignored.txt"),
+                r#"{"authToken":"ignored","__PERSIST__":{"timestamp":900}}"#,
+            )
+            .unwrap();
+            let (actual_auth, actual_refresh, timestamp) = scan_indexeddb(&dir).unwrap();
+            assert_eq!(actual_auth.as_deref(), auth);
+            assert_eq!(actual_refresh.as_deref(), refresh);
+            assert_eq!(timestamp, 300);
+        }
+        std::fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[test]
+    fn profile_selection_requires_exactly_one_tinder_profile() {
+        let root = std::env::temp_dir().join(format!("ttui-profiles-{}", uuid::Uuid::new_v4()));
+        let first = root.join("Default");
+        let second = root.join("Profile 1");
+        let unrelated = root.join("Unrelated");
+        std::fs::create_dir_all(&unrelated).unwrap();
+        assert!(
+            select_profile(vec![unrelated.clone()])
+                .unwrap_err()
+                .contains("No supported")
+        );
+        for profile in [&first, &second] {
+            std::fs::create_dir_all(profile.join("IndexedDB/https_tinder.com_0.indexeddb.leveldb"))
+                .unwrap();
+        }
+        assert_eq!(
+            select_profile(vec![unrelated.clone(), first.clone()]).unwrap(),
+            first
+        );
+        let error = select_profile(vec![first, unrelated, second]).unwrap_err();
+        assert!(error.contains("Multiple Tinder browser profiles"));
+        assert!(error.contains("TTUI_BROWSER_PROFILE"));
+        std::fs::remove_dir_all(root).unwrap();
+    }
+
+    #[test]
+    #[ignore = "explicit opt-in integration check; reads personal browser storage"]
     fn extracts_real_credentials_if_available() {
         if let Some(creds) = extract_freshest_credentials() {
             assert!(creds.is_usable());
