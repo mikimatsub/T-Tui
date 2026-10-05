@@ -39,7 +39,9 @@ CodeQL alert 1 was reviewed and dismissed as a false positive: the profile resou
 
 The candidate 1 native Windows executable connected through the selected Chrome profile and passed live read-only checks for account access, inbox, message history, profile details, discovery, update synchronization and photo decoding. A native ConPTY session passed navigation, saved-session restart and clean terminal exit. Sign-out was verified using a temporary session copy: credentials and account state were removed, the login screen appeared, and a subsequent check rejected access without a saved session. Personal screen content and credential values were not retained as test evidence. No messages, swipes, profile edits, unmatches or paid actions were sent.
 
-Ubuntu 26.04 under WSL2 is available for Linux acceptance. Published-download checks, Linux live acceptance, token renewal, older history when available, incoming-message behavior, another-account switching and deliberately authorized mutations remain unverified at this checkpoint.
+The Linux candidate from the checked CI run passed the same read-only account checks under Ubuntu 26.04 / WSL2, plus PTY navigation, saved-session restart, isolated sign-out and `0600` config permissions. These were CI artifacts; they were not downloaded from a published release. The selected Windows Chrome profile was imported separately on each OS, without copying Windows-encrypted credentials into Linux.
+
+Published-download checks, token renewal, older history when available, incoming-message behavior, another-account switching and deliberately authorized mutations remain unverified at this checkpoint. PR CI now also runs the release's GNU checksum command against both native archives, so future cross-platform checksum failures are caught before tagging.
 
 Follow [RELEASING.md](RELEASING.md) for login/import, refresh, restart, pagination, incoming updates, photos, sign-out and account-switching checks on Linux and Windows. Only a deliberately authorized check may send a message or perform another live mutation. Record date, version and terminal without credentials, personal messages or photos.
 
