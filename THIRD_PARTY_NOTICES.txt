@@ -68,9 +68,9 @@ Source: https://crates.io/crates/aws-lc-rs/1.18.1
 aws-lc-sys 0.45.0
 Declared license: ISC AND (Apache-2.0 OR ISC) AND Apache-2.0 AND MIT AND BSD-3-Clause AND (Apache-2.0 OR ISC OR MIT) AND (Apache-2.0 OR ISC OR MIT-0)
 Source: https://crates.io/crates/aws-lc-sys/0.45.0
+  LICENSE: 49f5cc2a2e4db6cc86cc1c853cbf00af70abd12c55dae8d6561f26ccd1bfd162
   aws-lc/LICENSE: 49f5cc2a2e4db6cc86cc1c853cbf00af70abd12c55dae8d6561f26ccd1bfd162
   aws-lc/third_party/fiat/LICENSE: c86c0f590ac954babf892ba6b03c50c00cdf326ddfd0ad31ed0ec16abdaada52
-  LICENSE: 49f5cc2a2e4db6cc86cc1c853cbf00af70abd12c55dae8d6561f26ccd1bfd162
 
 base64 0.22.1
 Declared license: MIT OR Apache-2.0
@@ -268,10 +268,10 @@ Source: https://crates.io/crates/darling_macro/0.24.1
 deltae 0.3.2
 Declared license: MIT
 Source: https://crates.io/crates/deltae/0.3.2
+  LICENSE: ea6e55b8355a6b9329480332ae87e4461d5e2f47ccbbb98142a9e42e11c02b51
   docs/doc/COPYRIGHT.txt: e5b61e9c8d8d3c74e73e748a610ff4fd7d074fdb2d1bdfc7eeff9ee884ea17b2
   docs/doc/LICENSE-APACHE.txt: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   docs/doc/LICENSE-MIT.txt: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
-  LICENSE: ea6e55b8355a6b9329480332ae87e4461d5e2f47ccbbb98142a9e42e11c02b51
 
 deranged 0.5.8
 Declared license: MIT OR Apache-2.0

@@ -1,5 +1,6 @@
 """Collect upstream license/notice texts for the locked Linux and Windows graphs."""
 import argparse
+import difflib
 import hashlib
 import json
 from pathlib import Path
@@ -36,15 +37,16 @@ def collect():
     texts, entries = {}, []
     for (name, version), package in sorted(packages.items()):
         root = Path(package['manifest_path']).parent
-        files = sorted(path for path in root.rglob('*') if path.is_file() and not path.is_symlink()
+        files = sorted((path for path in root.rglob('*') if path.is_file() and not path.is_symlink()
                        and (re.match(r'^(licen[sc]e|notice|copying|copyright)([._-]|$)', path.name, re.I)
-                            or any(part.lower() in ('licenses', 'license') for part in path.relative_to(root).parts[:-1])))
+                            or any(part.lower() in ('licenses', 'license') for part in path.relative_to(root).parts[:-1]))),
+                       key=lambda path: path.relative_to(root).as_posix())
         key = f'{name}-{version}'
         origin = f'https://crates.io/crates/{name}/{version}'
         if not files:
             assert key in sources, f'Missing upstream license texts: {key}'
             root = ROOT / 'docs/license-sources' / key
-            files = sorted(path for path in root.iterdir() if path.is_file())
+            files = sorted((path for path in root.iterdir() if path.is_file()), key=lambda path: path.name)
             origin += '\nSupplemental license sources: ' + ', '.join(sources[key])
         assert files and package['license'], f'Missing license information: {key}'
         refs = []
@@ -71,7 +73,11 @@ def main():
     sysroot = Path(subprocess.check_output(['rustc', '--print', 'sysroot'], text=True).strip())
     stdlib = normalized((sysroot / 'share/doc/rust/COPYRIGHT-library.html').read_text(encoding='utf-8'))
     if args.check:
-        assert notice.read_text(encoding='utf-8') == result, 'Regenerate dependency notices: python scripts/licenses.py'
+        previous = notice.read_text(encoding='utf-8')
+        if previous != result:
+            difference = list(difflib.unified_diff(previous.splitlines(), result.splitlines(), n=1))
+            print('\n'.join(difference[:100]))
+            raise AssertionError('Regenerate dependency notices: python scripts/licenses.py')
         assert (ROOT / 'RUST-STDLIB-LICENSE.html').read_text(encoding='utf-8') == stdlib, 'Regenerate Rust library notices'
     else:
         notice.write_text(result, encoding='utf-8', newline='\n')
