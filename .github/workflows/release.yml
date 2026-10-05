@@ -16,6 +16,7 @@ jobs:
       contents: read
       actions: read
       security-events: write
+      pull-requests: read
   publish:
     needs: [ci, security]
     runs-on: ubuntu-22.04

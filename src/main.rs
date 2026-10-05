@@ -73,7 +73,7 @@ fn main() -> Result<()> {
             }
             "--help" | "-h" => {
                 println!(
-                    "T-TUI — a quieter place for your conversations\n\nUsage: ttui [--mock | --live]\n\n  --mock, --demo      Offline demo with separate settings\n  --live              Connect to your Tinder account (default)\n  --login, --browser-login  Open browser and automatically log in\n  --check             Check the saved session without sending messages or swipes\n  --import-session    Import a copied cURL request from stdin\n  --version           Show version\n\nF1 for keys. Ctrl-Q or Ctrl-C to quit.\nConfig: {}",
+                    "T-TUI — a quieter place for your conversations\n\nUsage: ttui [--mock | --live]\n\n  --mock, --demo      Offline demo with separate settings\n  --live              Connect to your Tinder account (default)\n  --login, --browser-login  Experimental Chromium session extraction\n  --check             Check the saved session without sending messages or swipes\n  --import-session    Import a copied cURL request from stdin\n  --doctor            Local diagnostics; no account access\n  --clear-cache       Remove managed cached photos (close other instances first)\n  --version           Show version\n\nF1 for keys. Ctrl-Q or Ctrl-C to quit.\nConfig: {}",
                     Config::config_path().display()
                 );
                 return Ok(());

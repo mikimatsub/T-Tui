@@ -12,6 +12,10 @@ publish = false
 strip = "symbols"
 lto = "thin"
 
+[patch.crates-io]
+# Remove when a published Crossterm release fixes upstream #1072.
+crossterm = { path = "vendor/crossterm" }
+
 [dependencies]
 anyhow = "1.0.104"
 async-trait = "0.1.92"
