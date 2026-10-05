@@ -1,0 +1,6 @@
+# Reviewed offline fixtures from the original commit, not credentials.
+# hidden-token-example: pasted into an isolated login UI, checked for masking,
+# then quit without connecting or persisting a live session.
+8c5dd94184241473b777324f654284904406855c:scripts/pty_e2e.py:curl-auth-header:224
+# mock-import-token: imported only with --mock and checked in demo.json.
+8c5dd94184241473b777324f654284904406855c:scripts/pty_e2e.py:curl-auth-header:273

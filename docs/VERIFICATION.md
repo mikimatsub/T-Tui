@@ -14,6 +14,8 @@ The unit-test line coverage baselines before the final input/retry tests were 73
 
 The actual locally packed npm tarball passed Windows install/command checks. WinGet's native validator accepted a generated three-file manifest set without warnings using an explicitly non-installable schema fixture. This does not verify a public installer URL or replace stable-artifact installation testing.
 
+The full-history Gitleaks check identified two literal offline test values in the original commit. Their exact finding fingerprints are documented in `.gitleaksignore`; no file, rule or commit is broadly excluded. The subsequent full-history scan passed. CI now runs this complete-history check in addition to the Action's change-range scan.
+
 ## Behavioral evidence
 
 | Requirement | Evidence |
