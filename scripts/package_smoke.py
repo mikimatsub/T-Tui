@@ -16,7 +16,7 @@ def main():
     assert npm, 'npm unavailable'
     packed = json.loads(run([npm, 'pack', '--json', '--ignore-scripts', '--pack-destination', str(ROOT / 'dist')], cwd=ROOT / 'target/npm-stage'))[0]
     names = {entry['path'] for entry in packed['files']}
-    expected = {'package.json', 'LICENSE', 'CROSSTERM-LICENSE', 'README.md', 'checksums.json', 'bin/ttui.mjs', 'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}
+    expected = {'package.json', 'LICENSE', 'CROSSTERM-LICENSE', 'THIRD_PARTY_NOTICES.txt', 'RUST-STDLIB-LICENSE.html', 'README.md', 'checksums.json', 'bin/ttui.mjs', 'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}
     assert names == expected, f'Unexpected package contents: {names ^ expected}'
     tarball = ROOT / 'dist' / packed['filename']
     with tarfile.open(tarball) as archive:

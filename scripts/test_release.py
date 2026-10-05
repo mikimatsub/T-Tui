@@ -58,6 +58,8 @@ class ReleaseTests(unittest.TestCase):
         self.write('LICENSE', b'test license\n')
         self.write('README.md', b'test readme\n')
         self.write('vendor/crossterm/LICENSE', b'test vendored license\n')
+        self.write('THIRD_PARTY_NOTICES.txt', b'test dependency notices\n')
+        self.write('RUST-STDLIB-LICENSE.html', b'test Rust notices\n')
         self.artifacts = self.root / 'artifacts'
         self.artifacts.mkdir()
         self.output = self.root / 'stage'
@@ -158,7 +160,7 @@ class ReleaseTests(unittest.TestCase):
                     release.native(platform, binary, output)
                 archive = next(path for path in output.iterdir() if not path.name.endswith('.sha256'))
                 member = 'ttui.exe' if platform == 'win32-x64' else 'ttui'
-                expected = {member, 'LICENSE', 'README.md', 'CROSSTERM-LICENSE'}
+                expected = {member, 'LICENSE', 'README.md', 'CROSSTERM-LICENSE', 'THIRD_PARTY_NOTICES.txt', 'RUST-STDLIB-LICENSE.html'}
                 if platform == 'win32-x64':
                     with zipfile.ZipFile(archive) as reader:
                         self.assertEqual(set(reader.namelist()), expected)
@@ -183,6 +185,8 @@ class ReleaseTests(unittest.TestCase):
             expected_hashes[relative] = hashlib.sha256(content).hexdigest()
         self.assertEqual(json.loads((self.output / 'checksums.json').read_text()), expected_hashes)
         self.assertEqual((self.output / 'CROSSTERM-LICENSE').read_bytes(), b'test vendored license\n')
+        self.assertEqual((self.output / 'THIRD_PARTY_NOTICES.txt').read_bytes(), b'test dependency notices\n')
+        self.assertEqual((self.output / 'RUST-STDLIB-LICENSE.html').read_bytes(), b'test Rust notices\n')
         self.assertEqual(json.loads((self.output / 'package.json').read_text())['version'], '1.0.0-rc.1')
         self.assertFalse((self.root / 'outside.txt').exists())
         self.assertFalse((self.output / 'unrelated').exists())

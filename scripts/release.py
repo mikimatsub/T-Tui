@@ -38,7 +38,9 @@ def native(platform, binary, output):
     name = f'ttui-{v}-{TARGETS[platform]}'
     members = {('ttui.exe' if platform == 'win32-x64' else 'ttui'): binary,
                'LICENSE': ROOT / 'LICENSE', 'README.md': ROOT / 'README.md',
-               'CROSSTERM-LICENSE': ROOT / 'vendor/crossterm/LICENSE'}
+               'CROSSTERM-LICENSE': ROOT / 'vendor/crossterm/LICENSE',
+               'THIRD_PARTY_NOTICES.txt': ROOT / 'THIRD_PARTY_NOTICES.txt',
+               'RUST-STDLIB-LICENSE.html': ROOT / 'RUST-STDLIB-LICENSE.html'}
     if platform == 'win32-x64':
         archive = output / f'{name}.zip'
         with zipfile.ZipFile(archive, 'w', compression=zipfile.ZIP_DEFLATED) as writer:
@@ -62,7 +64,7 @@ def bundle(artifacts, output):
     output.mkdir(parents=True, exist_ok=False)
     shutil.copytree(ROOT / 'npm/bin', output / 'bin')
     shutil.copy2(ROOT / 'npm/package.json', output / 'package.json')
-    for filename in ['LICENSE', 'README.md']:
+    for filename in ['LICENSE', 'README.md', 'THIRD_PARTY_NOTICES.txt', 'RUST-STDLIB-LICENSE.html']:
         shutil.copy2(ROOT / filename, output / filename)
     shutil.copy2(ROOT / 'vendor/crossterm/LICENSE', output / 'CROSSTERM-LICENSE')
     hashes = {}

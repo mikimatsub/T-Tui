@@ -1,5 +1,7 @@
 # Contributing
 
+After dependency or Rust toolchain changes, run `python scripts/licenses.py` and review the regenerated dependency and standard-library notices. See [license sources](docs/license-sources/README.md). CI rejects stale notices on either supported platform.
+
 Keep changes small and useful for a free terminal application. Linux x86-64 and native Windows x86-64 receive equal release attention. Start with `ttui --mock`; never use a personal account in automated tests.
 
 The Rust toolchain is pinned in `rust-toolchain.toml`. Windows builds use MSVC and its static C runtime. Install the MSVC C++ build tools when building from source. Run:

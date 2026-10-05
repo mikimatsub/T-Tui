@@ -1,0 +1,25 @@
+{
+  "base64-simd-0.8.0": [
+    "https://raw.githubusercontent.com/Nugine/simd/d74c030d9dc4f3cae02146d1f497ff62726ef09a/LICENSE"
+  ],
+  "vsimd-0.8.0": [
+    "https://raw.githubusercontent.com/Nugine/simd/d74c030d9dc4f3cae02146d1f497ff62726ef09a/LICENSE"
+  ],
+  "icy_sixel-0.5.1": [
+    "https://raw.githubusercontent.com/mkrueger/icy_sixel/7baecc1bbb18ddf0ff0de83d296b4509a1b64b0f/LICENSE-APACHE",
+    "https://raw.githubusercontent.com/mkrueger/icy_sixel/7baecc1bbb18ddf0ff0de83d296b4509a1b64b0f/LICENSE-MIT"
+  ],
+  "quantette-0.6.0": [
+    "https://raw.githubusercontent.com/IanManske/quantette/066855ad3efb4143c3b901c812f80b9b17f8f303/LICENSE-APACHE",
+    "https://raw.githubusercontent.com/IanManske/quantette/066855ad3efb4143c3b901c812f80b9b17f8f303/LICENSE-MIT"
+  ],
+  "ratatui-termina-0.1.0": [
+    "https://raw.githubusercontent.com/ratatui/ratatui/e665c36cb14752a61cd777fbd06dbef8474f2add/LICENSE"
+  ],
+  "vtparse-0.6.2": [
+    "https://raw.githubusercontent.com/wezterm/wezterm/edeae72b5fc55c7fa4aa1d08bbefd08c5493f757/LICENSE.md"
+  ],
+  "wezterm-input-types-0.1.0": [
+    "https://raw.githubusercontent.com/wezterm/wezterm/d5ca5509b95edc31291ba29bd1fcbf3f0b12c92d/LICENSE.md"
+  ]
+}

@@ -2,6 +2,8 @@
 
 GitHub Releases is the primary binary channel. The initial supported targets are Linux x86-64 (glibc, built on Ubuntu 22.04) and Windows x86-64 (MSVC, static C runtime). Native installation requires neither Node nor Rust. ARM and macOS builds are outside the 1.0 support promise.
 
+Native archives and the npm package include collected dependency license/notice texts and Rust standard-library notices. Regenerate them with `python scripts/licenses.py` after dependency or toolchain changes; CI verifies them against the exact locked sources and installed toolchain.
+
 The npm package `@mikimatsub/ttui` is a convenience for Node users. It contains both native binaries, an argument-preserving launcher, MIT license, README and hashes. It has no dependencies, postinstall script or runtime download. CI packs the actual tarball, checks its complete file list and binary hashes, installs it without scripts in a temporary directory, then runs the installed command on both platforms.
 
 WinGet can distribute the Windows zip as a portable installer with the `ttui` alias. The generator writes an actual archive SHA-256 and the tagged GitHub asset URL. A manifest is prepared only for stable versions. Microsoft validation and community-repository review are separate from GitHub publication; availability cannot be promised before acceptance. crates.io source distribution can be added later; Cargo publishing is deliberately disabled for now.
