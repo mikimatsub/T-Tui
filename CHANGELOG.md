@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0-rc.2 (2026-10-05)
+
+- Write archive checksum files with LF line endings on both platforms. The first candidate stopped before publication because GNU `sha256sum` interpreted the Windows CRLF terminator as part of the archive filename. The packaging regression now compares raw bytes so text-mode normalization cannot hide this failure.
+- Record initial live Windows acceptance and the completed post-merge checks. Stable acceptance and registry publication remain separate gates.
+
 ## 1.0.0-rc.1 (2026-10-05)
 
 - Add Linux/Windows CI, terminal tests, package installation checks, coverage artifacts, secret/dependency scanning, public-repository CodeQL, and shared Renovate policy.

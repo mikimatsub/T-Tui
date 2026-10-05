@@ -46,4 +46,4 @@ Started 2026-10-05. Linux and native Windows have equal priority. The reference 
 
 Keep the Rust application and local state model. No hosted service, container deployment, MCP Registry entry, or Docker pipeline is needed. Automated tests use fictional accounts and must never send real messages, swipes, unmatches, or paid actions. Public registry versions and WinGet acceptance must be confirmed upstream.
 
-[docs/VERIFICATION.md](docs/VERIFICATION.md) records completed checks and remaining limits. A generated workflow or manifest is preparation, not proof that publication succeeded. The source remains `1.0.0-rc.1` until stable acceptance is complete.
+[docs/VERIFICATION.md](docs/VERIFICATION.md) records completed checks and remaining limits. A generated workflow or manifest is preparation, not proof that publication succeeded. The source is `1.0.0-rc.2`; stable acceptance is still incomplete. The first tag's publication stopped at checksum validation before creating a release, and that tag remains unchanged.

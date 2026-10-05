@@ -31,8 +31,18 @@ Test fixtures model existing adapter contracts and parser edge cases. They are n
 
 ## Remaining release acceptance
 
+### 2026-10-05 candidate acceptance update
+
+PR #1 and its merged commit `eed6019d247afc21dbfe26b68447a4a3af637484` passed every required check. The first tagged [release run](https://github.com/mikimatsub/T-Tui/actions/runs/37269415931) also passed CI and security, then stopped at checksum verification before creating any release. Windows text output had produced CRLF checksum records. Candidate 2 writes exact ASCII bytes with LF, and the existing archive regression now verifies raw checksum bytes. The strengthened test failed on Windows before the fix and passed afterward.
+
+CodeQL alert 1 was reviewed and dismissed as a false positive: the profile resource ID travels to the fixed HTTPS API endpoint, redirects are disabled, credentials stay in headers, and network errors remove URLs. No scanner rule or path was excluded.
+
+The candidate 1 native Windows executable connected through the selected Chrome profile and passed live read-only checks for account access, inbox, message history, profile details, discovery, update synchronization and photo decoding. A native ConPTY session passed navigation, saved-session restart and clean terminal exit. Sign-out was verified using a temporary session copy: credentials and account state were removed, the login screen appeared, and a subsequent check rejected access without a saved session. Personal screen content and credential values were not retained as test evidence. No messages, swipes, profile edits, unmatches or paid actions were sent.
+
+Ubuntu 26.04 under WSL2 is available for Linux acceptance. Published-download checks, Linux live acceptance, token renewal, older history when available, incoming-message behavior, another-account switching and deliberately authorized mutations remain unverified at this checkpoint.
+
 Follow [RELEASING.md](RELEASING.md) for login/import, refresh, restart, pagination, incoming updates, photos, sign-out and account-switching checks on Linux and Windows. Only a deliberately authorized check may send a message or perform another live mutation. Record date, version and terminal without credentials, personal messages or photos.
 
 The repository became public after the private checks passed. `main` requires a PR and eleven CI/security checks, including Linux and Windows builds, both package jobs and four CodeQL languages; these rules apply to administrators too. Force pushes and deletion are blocked. The release environment accepts only `v*` tags. GitHub secret scanning, push protection, dependency alerts and private vulnerability reporting are enabled. Public CodeQL and the final commit's checks must pass before merging.
 
-Registry ownership/trusted publishing, public archive installation, npm provenance and WinGet validation/acceptance must each be verified independently. No live-account acceptance, npm publication or WinGet acceptance has been completed by these automated checks. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation.
+Registry ownership/trusted publishing, public archive installation, npm provenance and WinGet validation/acceptance must each be verified independently. The Windows live checks above cover only the listed operations; they do not establish full acceptance. npm publication and WinGet acceptance remain unverified. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation.
