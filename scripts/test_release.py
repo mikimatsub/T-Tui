@@ -171,8 +171,10 @@ class ReleaseTests(unittest.TestCase):
                         self.assertEqual(reader.extractfile(member).read(), b'local archive fixture')
                         self.assertEqual(reader.getmember(member).mode, 0o755)
                         self.assertEqual(reader.getmember('LICENSE').mode, 0o644)
-                checksum = archive.with_name(archive.name + '.sha256').read_text()
-                self.assertEqual(checksum, f'{hashlib.sha256(archive.read_bytes()).hexdigest()}  {archive.name}\n')
+                # Read bytes: text mode hides CRLF, which GNU sha256sum treats as
+                # a carriage return in the archive filename on Linux.
+                checksum = archive.with_name(archive.name + '.sha256').read_bytes()
+                self.assertEqual(checksum, f'{hashlib.sha256(archive.read_bytes()).hexdigest()}  {archive.name}\n'.encode('ascii'))
 
     def test_bundle_selects_only_exact_binaries_and_emits_both_checksums(self):
         self.archives()

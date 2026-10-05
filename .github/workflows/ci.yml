@@ -112,6 +112,11 @@ jobs:
           pattern: native-*
           path: dist
           merge-multiple: true
+      - name: Verify both native archive checksums on Linux
+        if: runner.os == 'Linux'
+        working-directory: dist
+        shell: bash
+        run: sha256sum --check *.sha256
       - run: python scripts/release.py bundle --artifacts dist --output target/npm-stage
       - run: python scripts/package_smoke.py
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1

@@ -10,7 +10,7 @@ Tinder can change these endpoints or send you back to the website to finish veri
 
 ## Preparing 1.0
 
-The current source is **1.0.0-rc.1**. Linux and native Windows are equal priorities. A stable release is not yet published. [CHANGELOG.md](CHANGELOG.md) records changes, [PLAN.md](PLAN.md) tracks execution, and [docs/RELEASING.md](docs/RELEASING.md) defines release gates.
+The current source is **1.0.0-rc.2**. Linux and native Windows are equal priorities. A stable release is not yet published. [CHANGELOG.md](CHANGELOG.md) records changes, [PLAN.md](PLAN.md) tracks execution, and [docs/RELEASING.md](docs/RELEASING.md) defines release gates.
 
 Check [GitHub Releases](https://github.com/mikimatsub/T-Tui/releases) for standalone x86-64 candidate binaries and their checksums. `@mikimatsub/ttui` is the planned npm convenience package; WinGet is planned after a public stable release and Microsoft review. A downloadable npm tarball in a GitHub release is not an npm registry publication. ARM and macOS are outside the 1.0 support promise.
 

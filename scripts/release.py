@@ -56,7 +56,7 @@ def native(platform, binary, output):
                 info.mode = 0o755 if member == 'ttui' else 0o644
                 with path.open('rb') as source:
                     writer.addfile(info, source)
-    (output / f'{archive.name}.sha256').write_text(f'{digest(archive)}  {archive.name}\n')
+    (output / f'{archive.name}.sha256').write_bytes(f'{digest(archive)}  {archive.name}\n'.encode('ascii'))
     print(archive)
 
 def bundle(artifacts, output):
