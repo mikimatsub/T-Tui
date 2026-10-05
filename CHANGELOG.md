@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0-rc.1 (unreleased)
+## 1.0.0-rc.1 (2026-10-05)
 
 - Add Linux/Windows CI, terminal tests, package installation checks, coverage artifacts, secret/dependency scanning, public-repository CodeQL, and shared Renovate policy.
 - Add native release archives, checksums, build provenance, an npm package with bundled binaries, and a stable-release WinGet manifest generator.
