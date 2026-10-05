@@ -9,6 +9,8 @@ Registry/release evidence checked 2026-10-05. These are selected pins, not promi
 | Python | 3.14.8 | 2026-09-30 | [release/support index](https://endoflife.date/api/python.json) |
 | windows-sys | 0.61.2 | 2025-10-06 | [crates.io](https://crates.io/api/v1/crates/windows-sys) |
 | cargo-llvm-cov | 0.9.1 | 2026-09-06 | [crates.io](https://crates.io/api/v1/crates/cargo-llvm-cov) |
+| Gitleaks binary | 8.30.1 | 2026-03-21 | [upstream release](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1) |
+| crossterm (local patch) | 0.29.0 | 2025-04-05 | [crates.io](https://crates.io/api/v1/crates/crossterm), [patch provenance](../vendor/crossterm/LOCAL_PATCH.md) |
 | pyte | 0.8.2 | 2023-11-12 | [PyPI](https://pypi.org/pypi/pyte/json) |
 | Pillow | 12.3.0 | 2026-07-01 | [PyPI](https://pypi.org/pypi/pillow/json) |
 | pywinpty | 3.0.5 | 2026-06-10 | [PyPI](https://pypi.org/pypi/pywinpty/json) |

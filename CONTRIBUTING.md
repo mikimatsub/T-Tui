@@ -5,7 +5,7 @@ Keep changes small and useful for a free terminal application. Linux x86-64 and 
 The Rust toolchain is pinned in `rust-toolchain.toml`. Windows builds use MSVC and its static C runtime. Install the MSVC C++ build tools when building from source. Run:
 
 ```sh
-cargo fmt --all -- --check
+cargo fmt --package ttui -- --check
 cargo clippy --locked --all-targets -- -D warnings
 cargo test --locked
 cargo build --release --locked

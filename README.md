@@ -122,9 +122,10 @@ ttui --check
 | Inbox | `d` discover, `s` settings, `r` refresh, `Home` / `End` first or last |
 | Discovery | `y` like, `n` pass, `←→` photos, `↑↓` profile details, `m` inbox, `r` refresh |
 | Discovery extras | `u` Super Like, `b` Boost (both ask for confirmation), `w` Tinder Web |
-| Chat | Type normally, `Enter` send, `Alt-Enter` newline, `Esc` save the draft and return |
+| Chat on Linux | Type normally, `Enter` send, `Alt-Enter` newline, `Esc` save the draft and return |
+| Chat on Windows | `Ctrl-S` or **Send** sends; `Enter` inserts a newline. This keeps multiline terminal paste in the draft. |
 | Chat editing | `←→`, `Home` / `End`, `Backspace` / `Delete`, `Ctrl-U` clear |
-| Chat tools | `Ctrl-P` profile, `Ctrl-S` settings, `Ctrl-R` restore a failed message for review |
+| Chat tools | `Ctrl-P` profile, `Ctrl-R` restore a failed message; settings: `Ctrl-S` on Linux or `Esc` then `s` on Windows |
 | Chat safety | `Ctrl-X` unmatch (confirmation required). **Report help** opens Tinder's reporting instructions |
 | Chat history | `↑↓` scroll, `PgUp` fetch older history, `PgDn` scroll toward the latest |
 | Profile | `←→` photos, `↑↓` scroll, `Enter` chat, `v` external viewer, `Esc` back |
@@ -153,6 +154,9 @@ Inbox tools are All, Unread, New, Drafts, and Pinned filters, Recent, Name, and 
 | Name | Default | Notes |
 |---|---|---|
 | `TTUI_INSTALL_DIR` | `~/.local/bin` | Destination used by `scripts/install.sh`. |
+| `TTUI_DATA_DIR` | Platform directories | Optional isolated root with `config` and `cache` subdirectories. |
+| Windows account file | `%APPDATA%\ttui\config.json` | Credentials use current-user DPAPI; drafts and settings remain readable JSON. |
+| Windows photo cache | `%LOCALAPPDATA%\ttui\photos` | Managed cache files; `--clear-cache` removes them. |
 | Account file | `$XDG_CONFIG_HOME/ttui/config.json` | Usually `~/.config/ttui/config.json`. Mode `0600`. Holds the session, drafts, pins, read markers, and settings. |
 | Demo file | `demo.json` in that same directory | Separate settings and drafts for `--mock`. |
 | Photo cache | `$XDG_CACHE_HOME/ttui/photos` | Usually `~/.cache/ttui/photos`. |
@@ -179,7 +183,7 @@ Day-to-day use stops at [Quick start](#quick-start). This section is for changin
 cargo build --release --locked
 cargo test --locked
 cargo clippy --locked --all-targets -- -D warnings
-cargo fmt --all --check
+cargo fmt --package ttui -- --check
 python -m pip install --require-hashes -r scripts/test-requirements.txt
 python scripts/pty_e2e.py --binary target/release/ttui
 ```

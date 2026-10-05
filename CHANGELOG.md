@@ -8,6 +8,7 @@
 - Reject ambiguous swipe acknowledgements and share server cooldowns across API requests without automatic mutation retries.
 - Make browser profile selection explicit when ambiguous; keep auth and refresh tokens from the same record and isolate demo mode.
 - Add native Windows URL/photo opening, an installation script, local diagnostics, bounded/clearable photo storage, quiet-period draft saves, and Load More up to 1,000 conversations.
+- Preserve Windows emoji through a documented local Crossterm patch. On Windows, Enter adds a newline and Ctrl-S sends, keeping multiline paste in the draft.
 - Add MIT licensing, contribution guidance, security documentation and issue/PR templates.
 
 Live-account acceptance checks and registry setup remain release gates. Desktop notifications and auto-swipe remain future work.

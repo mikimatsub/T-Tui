@@ -22,6 +22,7 @@ def main():
     with tarfile.open(tarball) as archive:
         import hashlib
         hashes = json.load(archive.extractfile('package/checksums.json'))
+        assert set(hashes) == {'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}, 'Missing binary checksums'
         for path, sha in hashes.items():
             assert hashlib.sha256(archive.extractfile('package/' + path).read()).hexdigest() == sha
     with tempfile.TemporaryDirectory(prefix='ttui-package-') as temp:

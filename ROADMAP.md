@@ -2,6 +2,8 @@
 
 Reviewed **2026-10-05**, against commit `8c5dd94` on `main` and current GitHub metadata. This is a proposed plan, not a claim that the work below has shipped. Linux and native Windows are equal priorities, as confirmed by the maintainer.
 
+The implementation now follows [PLAN.md](PLAN.md); [docs/VERIFICATION.md](docs/VERIFICATION.md) records evidence and remaining acceptance. This inventory preserves the original review baseline.
+
 ## Recommendation
 
 Keep the existing Rust application. It already contains enough functionality for a useful 1.0. Spend the next effort on dependable sessions, truthful action results, both operating systems, and repeatable releases. Add at most two small convenience features before the release candidate.

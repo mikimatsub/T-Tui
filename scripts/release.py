@@ -12,6 +12,8 @@ import tomllib
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
+if not __debug__:
+    raise RuntimeError('Release validation requires Python without -O or PYTHONOPTIMIZE')
 TARGETS = {'linux-x64': 'x86_64-unknown-linux-gnu', 'win32-x64': 'x86_64-pc-windows-msvc'}
 
 def version():
@@ -19,11 +21,12 @@ def version():
     package = json.loads((ROOT / 'npm/package.json').read_text())
     assert rust == package['version'], 'Cargo and npm versions differ'
     assert re.fullmatch(r'\d+\.\d+\.\d+(?:-rc\.\d+)?', rust), 'Unexpected release version'
-    assert not package.get('scripts') and not package.get('dependencies'), 'Launcher must not add install scripts or dependencies'
+    assert not any(package.get(key) for key in ['scripts', 'dependencies', 'optionalDependencies', 'peerDependencies']), 'Launcher must not add install scripts or dependencies'
     return rust
 
 def digest(path):
-    return hashlib.file_digest(path.open('rb'), 'sha256').hexdigest()
+    with path.open('rb') as source:
+        return hashlib.file_digest(source, 'sha256').hexdigest()
 
 def native(platform, binary, output):
     v = version()
@@ -72,10 +75,17 @@ def bundle(artifacts, output):
         # Read only the exact executable member; never extract archive paths.
         if ext == 'zip':
             with zipfile.ZipFile(path) as archive:
-                data = archive.read(member)
+                matches = [entry for entry in archive.infolist() if entry.filename == member]
+                assert len(matches) == 1, 'Expected exactly one executable archive member'
+                entry = matches[0]
+                kind = (entry.external_attr >> 16) & 0o170000
+                assert not entry.is_dir() and kind in (0, 0o100000), 'Executable must be a regular file'
+                data = archive.read(entry)
         else:
             with tarfile.open(path) as archive:
-                data = archive.extractfile(member).read()
+                matches = [entry for entry in archive.getmembers() if entry.name == member]
+                assert len(matches) == 1 and matches[0].isfile(), 'Expected exactly one regular executable archive member'
+                data = archive.extractfile(matches[0]).read()
         destination = output / 'bin' / platform / member
         destination.parent.mkdir(parents=True)
         destination.write_bytes(data)

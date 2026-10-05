@@ -754,6 +754,8 @@ impl App {
         self.cursor += s.len();
     }
     fn chat_key(&mut self, ev: KeyEvent) {
+        // Windows console events do not preserve bracketed-paste boundaries.
+        // Treat plain CR/LF as draft text; sending requires Ctrl-S or the Send button.
         let ctrl = ev.modifiers.contains(KeyModifiers::CONTROL);
         if ctrl {
             match ev.code {
@@ -766,7 +768,10 @@ impl App {
                 KeyCode::Char('p') => self.selected_profile(),
                 KeyCode::Char('r') => self.retry_failed(),
                 KeyCode::Char('x') => self.activate(Action::Unmatch),
+                KeyCode::Char('s') if cfg!(windows) => self.send(),
                 KeyCode::Char('s') => self.open_settings(),
+                KeyCode::Char('j' | 'm') if cfg!(windows) => self.insert_text("\n"),
+                KeyCode::Enter if cfg!(windows) => self.insert_text("\n"),
                 _ => {}
             }
             return;
@@ -778,7 +783,8 @@ impl App {
                 self.screen = Screen::Matches;
             }
             KeyCode::Enter
-                if ev.modifiers.contains(KeyModifiers::SHIFT)
+                if cfg!(windows)
+                    || ev.modifiers.contains(KeyModifiers::SHIFT)
                     || ev.modifiers.contains(KeyModifiers::ALT) =>
             {
                 self.insert_text("\n")

@@ -1,46 +1,48 @@
 # Execution plan for T-TUI 1.0
 
-Started 2026-10-05. Linux and native Windows have equal priority. The reference is the current `mikimatsub/swsd-mcp` main branch, not its older local checkout. Implementation is on `codex/1.0-release`.
+Started 2026-10-05. Linux and native Windows have equal priority. The reference is the current `mikimatsub/swsd-mcp` main branch. Implementation is on `codex/1.0-release`, reviewed in [PR #1](https://github.com/mikimatsub/T-Tui/pull/1). The original inventory and priorities remain in [ROADMAP.md](ROADMAP.md).
 
 ## 1. Establish the release baseline
 
-- [x] Inspect current source, review findings, reference workflows, and distribution documentation.
-- [ ] Fix platform-specific lint errors and make default tests independent of personal browser sessions and filesystem permissions.
-- [ ] Adopt the reference project's MIT license, conventional commits, contribution/security guidance, ownership, PR/issue templates, and inherited Renovate policy.
-- [ ] Pin verified tool versions and GitHub Actions commits; record sources and verification dates.
-- [ ] Add Linux/Windows CI, coverage evidence, secret scanning, dependency scanning, and CodeQL for supported languages.
+- [x] Inspect source, review findings, reference workflows, and distribution documentation.
+- [x] Fix platform-specific lint errors and isolate default tests from personal browser sessions and arbitrary filesystem locations.
+- [x] Adopt MIT licensing, conventional commits, contribution/security guidance, ownership, PR/issue templates, and inherited Renovate policy.
+- [x] Pin verified tools and Actions commits; record sources and publication dates in [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md).
+- [x] Add Linux/Windows CI, coverage artifacts, full-history secret scanning, OSV dependency scanning, and public-repository CodeQL.
 
 ## 2. Harden the existing application
 
-- [ ] Preserve a persistent, actionable error when sign-out cannot clear saved credentials.
-- [ ] Reject unconfirmed swipe responses; share service cooldowns across requests without replaying mutations.
-- [ ] Isolate account state on account changes and debounce draft persistence.
-- [ ] Make automatic browser extraction explicitly experimental, avoid silently selecting among multiple profiles, and stop mixing credential records.
-- [ ] Protect persisted Windows secrets using the current user's Windows data-protection API; retain private Unix config files.
-- [ ] Unify platform-specific URL/photo launching, add Windows installation, and provide bounded/clearable photo storage.
-- [ ] Add regression coverage for changed behavior and run actual terminal smoke checks on both platforms where available.
+- [x] Preserve an actionable sign-out error when saved credentials cannot be cleared.
+- [x] Reject unconfirmed swipe responses and share cooldowns without replaying mutations.
+- [x] Isolate account state and debounce draft saves, retaining failed saves for retry.
+- [x] Keep browser extraction experimental, require a profile choice when ambiguous, and avoid mixing credential records.
+- [x] Protect Windows credentials with current-user DPAPI; retain private Unix files.
+- [x] Add native Windows URL/photo launching and installation, plus bounded/clearable photo storage.
+- [x] Add behavioral regressions and native terminal suites. Fix Windows emoji and multiline input defects discovered by ConPTY testing.
 
 ## 3. Add focused usability
 
-- [ ] Add incremental inbox loading with honest search scope.
-- [ ] Add optional notifications with generic text and no profile/message content.
-- [ ] Improve local diagnostic and connection feedback.
-- [ ] Keep auto-swipe out of the stable release requirements; preserve its reviewed design as a later experiment.
+- [x] Add Load More, increasing the fetched inbox by 100 up to 1,000 conversations. Search explicitly covers loaded conversations. This refetches the expanded inbox rather than retaining a pagination cursor.
+- [x] Add account-free local diagnostics and clearer session failure feedback.
+- [x] Keep auto-swipe as a later opt-in experiment, subject to the design and service restrictions in the roadmap.
+- [ ] Later: generic desktop notifications. Platform notification packaging adds work without improving the core release gates; defer until the existing workflows are accepted.
 
 ## 4. Prepare and verify distribution
 
-- [ ] Build native Linux x86-64 and Windows x86-64 archives, checksums, and provenance from a release tag.
-- [ ] Prepare an npm convenience package containing the native binaries and a small launcher, without install scripts or install-time binary downloads.
-- [ ] Generate a WinGet portable manifest from the actual Windows archive hash; validate it before submission.
-- [ ] Document GitHub Releases as the primary binary channel, WinGet as the Windows package-manager channel, npm as an optional Node-based installation path, and crates.io as an optional source-build channel.
-- [ ] Add release/version/package-content checks and trusted publishing patterned after swsd-mcp.
-- [ ] Open a reviewable PR, run remote checks, repair failures, and record exact evidence.
-- [ ] Publish 1.0 only after the advertised stable workflows and release artifacts pass their gates. Record any remaining live-account, public-visibility, registry-authentication, or external-review requirement explicitly.
+- [x] Implement native Linux/Windows archives, checksums, and tag-based build provenance.
+- [x] Prepare an npm package with both native binaries and a launcher, with no install scripts or binary downloads.
+- [x] Implement a stable-only WinGet portable manifest generator using the actual Windows archive hash.
+- [x] Document GitHub Releases as the primary channel, npm as an optional Node-based installer, and WinGet as the eventual Windows package-manager channel. Defer crates.io.
+- [x] Add version, archive, package-content and installed-command checks; prepare OIDC publication.
+- [x] Open a reviewable PR and run hosted checks; repair failures with targeted regressions.
+- [ ] Confirm all checks on the final PR commit; make the repository public as authorized, then run CodeQL and enable repository protections.
+- [ ] Establish npm package ownership/authentication and configure the trusted publisher. No long-lived publishing token belongs in the repository.
+- [ ] Complete the redacted live-account acceptance checklist on both systems before calling the existing service integration stable.
+- [ ] Publish and verify the release candidate from actual public download/registry channels, then promote to 1.0 after acceptance.
+- [ ] Validate and test the stable WinGet manifest before submission; record Microsoft acceptance separately.
 
-## Boundaries
+## Boundaries and evidence
 
-Keep the Rust application and local state model. No hosted service, container deployment, MCP Registry entry, or Docker pipeline is needed for this terminal application. Do not send messages, swipes, unmatches, or paid actions during automated testing. Public registry versions and WinGet acceptance must never be claimed before the upstream systems confirm them.
+Keep the Rust application and local state model. No hosted service, container deployment, MCP Registry entry, or Docker pipeline is needed. Automated tests use fictional accounts and must never send real messages, swipes, unmatches, or paid actions. Public registry versions and WinGet acceptance must be confirmed upstream.
 
-## Progress
-
-The current reference project uses SHA-pinned Actions, minimal workflow permissions, concurrency cancellation, locked installs, tests/coverage, CodeQL, secret and OSV scanning, an inherited Renovate policy, and tag-based OIDC publishing. These practices are being adapted to Rust and native binaries.
+[docs/VERIFICATION.md](docs/VERIFICATION.md) records completed checks and remaining limits. A generated workflow or manifest is preparation, not proof that publication succeeded. The source remains `1.0.0-rc.1` until stable acceptance is complete.

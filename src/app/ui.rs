@@ -94,6 +94,9 @@ fn hint(app: &App) -> &'static str {
         Screen::Matches => {
             "↑↓ select   Enter chat   → profile   / search   d discover   s settings   F1 help"
         }
+        Screen::Chat if cfg!(windows) => {
+            "Ctrl-S send   Enter newline   Esc inbox   Ctrl-P profile   PgUp history   F1 help"
+        }
         Screen::Chat => {
             "Enter send   Esc inbox   Ctrl-P profile   ↑↓ scroll   PgUp history   F1 help"
         }
@@ -1267,9 +1270,17 @@ fn draw_help(f: &mut Frame, area: Rect, p: Palette, scroll: usize) {
         "f filter · o sort · p pin · a mark all read (local)",
         "",
         "CONVERSATION",
-        "Type freely, including j, k, l, q and ? · Enter sends",
+        if cfg!(windows) {
+            "Ctrl-S sends · Enter inserts a newline · typing stays in draft"
+        } else {
+            "Type freely, including j, k, l, q and ? · Enter sends"
+        },
         "←→ / Home / End edit · Ctrl-U clear · Alt-Enter newline",
-        "Ctrl-P profile · Ctrl-R restore failed draft · Ctrl-S settings",
+        if cfg!(windows) {
+            "Ctrl-P profile · Ctrl-R restore failed draft · Esc then s settings"
+        } else {
+            "Ctrl-P profile · Ctrl-R restore failed draft · Ctrl-S settings"
+        },
         "Ctrl-X unmatch (confirmation required)",
         "↑↓ scroll · PgUp older history · PgDn latest · Esc saves draft",
         "",
