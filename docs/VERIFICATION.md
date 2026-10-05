@@ -6,11 +6,13 @@ Recorded 2026-10-05 for the work in [PR #1](https://github.com/mikimatsub/T-Tui/
 
 - Rust formatting and strict Clippy checks pass with the pinned MSVC toolchain.
 - Windows Rust suite: 101 passed, one explicitly ignored test that reads personal browser storage. No live credentials were read.
-- Eleven Python packaging tests pass, covering version mismatches, exact archive-member selection, duplicate/link rejection, checksum tampering, executable modes and license inclusion. One Node launcher test passes.
+- Thirteen Python packaging tests pass, covering version mismatches, exact archive-member selection, duplicate/link rejection, checksum tampering, executable modes, license inclusion and stable-only WinGet manifests. One Node launcher test passes.
 - Native Windows ConPTY test passes using the optimized executable: Unicode and emoji, multiline paste, on-disk draft restoration, explicit Ctrl-S demo send, discovery, settings, resize, help and clean terminal exit.
 - Linux hosted terminal, unit, lint and coverage jobs passed on `01328a0`; the final updated commit must pass again. Hosted package checks exercise the real installed npm shim on both operating systems.
 
-The measured Windows unit-test line coverage baseline was 73.37% before the final input/retry tests. This is a baseline, not a threshold or a claim about every interaction. Coverage does not include terminal-script execution. The command-line entry point, browser integration and external process opening still need acceptance beyond mock tests.
+The unit-test line coverage baselines before the final input/retry tests were 73.37% on Windows and 73.01% on Linux. These are baselines, not thresholds or claims about every interaction. Coverage does not include terminal-script execution. The command-line entry point, browser integration and external process opening still need acceptance beyond mock tests.
+
+The actual locally packed npm tarball passed Windows install/command checks. WinGet's native validator accepted a generated three-file manifest set without warnings using an explicitly non-installable schema fixture. This does not verify a public installer URL or replace stable-artifact installation testing.
 
 ## Behavioral evidence
 

@@ -10,6 +10,7 @@ cargo clippy --locked --all-targets -- -D warnings
 cargo test --locked
 cargo build --release --locked
 node --test scripts/package.test.mjs
+python -m unittest discover -s scripts -p test_release.py -v
 ```
 
 On machines whose rustup default host is GNU, use the explicitly installed MSVC toolchain for Windows (`cargo +1.99.0-x86_64-pc-windows-msvc ...`). Tool versions and publication dates are recorded in [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md).

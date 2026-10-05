@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main, 'codex/**']
+    branches: [main]
   pull_request:
   workflow_call:
 permissions:
@@ -135,7 +135,11 @@ jobs:
             ~/.cargo/bin/cargo-llvm-cov
             target
           key: coverage-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml') }}-0.9.1
-      - run: cargo install cargo-llvm-cov --version 0.9.1 --locked
+      - name: Verify or install coverage tool
+        run: |
+          if [[ "$(cargo llvm-cov --version 2>/dev/null || true)" != 'cargo-llvm-cov 0.9.1' ]]; then
+            cargo install cargo-llvm-cov --version 0.9.1 --locked --force
+          fi
       - run: cargo llvm-cov --locked --lcov --output-path target/lcov.info
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:

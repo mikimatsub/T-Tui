@@ -8,7 +8,7 @@ WinGet can distribute the Windows zip as a portable installer with the `ttui` al
 
 ## One-time setup
 
-1. Make the repository public after reviewing the source and history. Public npm provenance, free OSS CodeQL and community WinGet downloads depend on public access. Configure the `release` GitHub environment for maintainer review and tag-only deployment.
+1. Make the repository public after reviewing the source and history. Public npm provenance, free OSS CodeQL and community WinGet downloads depend on public access. Configure the `release` GitHub environment for tag-only deployment. The publishing job also verifies that the tag points to a commit on protected `main`.
 2. Require CI and security checks on `main`, block force pushes and require a PR. Choose required check names from a completed run. Enable private vulnerability reporting. Install/enable Renovate for this repository; a config file alone does not install the app.
 3. Establish ownership of `@mikimatsub/ttui`. The name was absent from npm at review time; availability is not a reservation. Bootstrap the first publication with the maintainer's authenticated npm session if needed. Never store a long-lived publish token in this repository.
 4. In npm package settings, configure a GitHub Actions trusted publisher for owner `mikimatsub`, repository `T-Tui`, workflow `release.yml`, environment `release`. Subsequent publication uses GitHub OIDC and provenance. The workflow uses the npm bundled with the pinned Node LTS.

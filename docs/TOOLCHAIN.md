@@ -33,4 +33,4 @@ pyte remains the upstream stable release despite its age; it is used only as an 
 
 Action versions/publication dates were checked against each repository's GitHub release metadata; exact commit IDs were resolved from its tag with `git ls-remote` and are pinned in the workflow files. Action inputs were checked in the corresponding `action.yml` or reusable workflow. GitHub runner labels were checked against [runner-images](https://github.com/actions/runner-images).
 
-WinGet uses the published [1.12.0 manifest schema](https://github.com/microsoft/winget-cli/blob/master/schemas/JSON/manifests/v1.12.0/manifest.singleton.1.12.0.json) for zip/portable installers. It is a compatibility schema, not a pin on the latest WinGet client.
+WinGet uses the published [1.12.0 manifest schemas](https://github.com/microsoft/winget-cli/tree/master/schemas/JSON/manifests/v1.12.0) for zip/portable installers. The generator produces version, defaultLocale and installer files with schema headers, as required by the [community repository](https://github.com/microsoft/winget-pkgs/blob/master/doc/Authoring.md). This is a compatibility schema, not a pin on the latest WinGet client.

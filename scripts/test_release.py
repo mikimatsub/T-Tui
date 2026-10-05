@@ -16,6 +16,32 @@ import release
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_winget_rejects_release_candidates_without_creating_manifest(self):
+        with self.assertRaisesRegex(AssertionError, 'stable releases'):
+            release.winget(self.artifacts, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_winget_emits_community_manifest_set_with_real_archive_hash(self):
+        self.package['version'] = '1.0.0'
+        self.write_versions(rust='1.0.0')
+        archive = self.artifacts / 'ttui-1.0.0-x86_64-pc-windows-msvc.zip'
+        archive.write_bytes(b'offline archive fixture')
+        release.winget(self.artifacts, self.output)
+        expected = {'mikimatsub.TTUI.yaml': 'version',
+                    'mikimatsub.TTUI.locale.en-US.yaml': 'defaultLocale',
+                    'mikimatsub.TTUI.installer.yaml': 'installer'}
+        self.assertEqual({path.name for path in self.output.iterdir()}, set(expected))
+        for name, kind in expected.items():
+            content = (self.output / name).read_text(encoding='utf-8')
+            self.assertTrue(content.startswith(f'# yaml-language-server: $schema=https://aka.ms/winget-manifest.{kind}.1.12.0.schema.json\n'))
+            self.assertIn(f'ManifestType: {kind}\n', content)
+            self.assertIn('PackageVersion: 1.0.0\n', content)
+        installer = (self.output / 'mikimatsub.TTUI.installer.yaml').read_text()
+        self.assertIn('InstallerSha256: ' + hashlib.sha256(archive.read_bytes()).hexdigest().upper(), installer)
+        self.assertIn('https://github.com/mikimatsub/T-Tui/releases/download/v1.0.0/' + archive.name, installer)
+        self.assertIn('RelativeFilePath: ttui.exe', installer)
+        self.assertIn('PortableCommandAlias: ttui', installer)
+
     def setUp(self):
         directory = tempfile.TemporaryDirectory(prefix='ttui-release-test-')
         self.addCleanup(directory.cleanup)

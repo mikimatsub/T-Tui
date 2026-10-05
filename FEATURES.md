@@ -1,13 +1,13 @@
 # Feature parity checklist
 
-T-TUI 0.3 substantially expands the terminal client. It does **not** claim 100%
+T-TUI is preparing its 1.0 release candidate. It does **not** claim 100%
 Tinder Web parity. The service has no supported public API contract for this
 client, and some workflows still require Tinder Web.
 
 | Workflow | Terminal support |
 |---|---|
-| Automatic browser login, session import, reconnect and refresh-token renewal | Implemented |
-| Paginated inbox, previews, unread counts, saved chat drafts | Implemented |
+| Browser extraction, session import, reconnect and refresh-token renewal | Implemented; browser extraction is experimental and ambiguous profiles require a choice |
+| Paginated inbox, previews, unread counts, saved chat drafts | Implemented; Load More expands the fetched inbox up to 1,000 conversations |
 | Search names/previews, filters, sorting, pinned chats | Implemented; local tools over the loaded inbox |
 | Text chat, history pagination, incoming updates, failure recovery | Implemented |
 | Profile details, native photos and carousels | Implemented |
@@ -27,12 +27,14 @@ client, and some workflows still require Tinder Web.
 | Likes You, Top Picks, Explore, Double Date and other recommendation modes | Not implemented |
 | Rewind, Passport, advanced premium filters and read-receipt purchases | Not implemented |
 | Purchases, subscriptions, billing, account deletion | Still requires Tinder Web |
-| Phone/social sign-in, verification, CAPTCHA and appeals | Automated via browser login handoff (T-TUI detects session once completed) |
+| Phone/social sign-in, verification, CAPTCHA and appeals | Complete these manually on Tinder Web; experimental extraction can detect a completed session |
 | Browser push notifications, typing/presence indicators | Not implemented |
 
 **Account → Tinder Web** opens the website for workflows outside the terminal.
 Feature availability remains subject to the account and the server. A successful
 local test does not prove an unofficial endpoint works for every live account.
+See [docs/VERIFICATION.md](docs/VERIFICATION.md) for release-candidate evidence and
+the live-account acceptance work still required on Linux and Windows.
 
 ## Validation
 

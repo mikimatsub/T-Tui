@@ -100,16 +100,24 @@ def winget(artifacts, output):
     assert '-' not in v, 'WinGet submission is reserved for stable releases'
     archive = artifacts / f'ttui-{v}-{TARGETS["win32-x64"]}.zip'
     sha = digest(archive).upper()
-    manifest = f'''PackageIdentifier: mikimatsub.TTUI
-PackageVersion: {v}
-PackageLocale: en-US
+    header = '# yaml-language-server: $schema=https://aka.ms/winget-manifest.{}.1.12.0.schema.json\n'
+    common = f'PackageIdentifier: mikimatsub.TTUI\nPackageVersion: {v}\n'
+    manifests = {
+        'mikimatsub.TTUI.yaml': header.format('version') + common + '''DefaultLocale: en-US
+ManifestType: version
+ManifestVersion: 1.12.0
+''',
+        'mikimatsub.TTUI.locale.en-US.yaml': header.format('defaultLocale') + common + f'''PackageLocale: en-US
 Publisher: mikimatsub
 PackageName: T-TUI
 License: MIT
 LicenseUrl: https://github.com/mikimatsub/T-Tui/blob/v{v}/LICENSE
 ShortDescription: Terminal client for Tinder
 PackageUrl: https://github.com/mikimatsub/T-Tui
-Installers:
+ManifestType: defaultLocale
+ManifestVersion: 1.12.0
+''',
+        'mikimatsub.TTUI.installer.yaml': header.format('installer') + common + f'''Installers:
 - Architecture: x64
   InstallerType: zip
   NestedInstallerType: portable
@@ -118,11 +126,12 @@ Installers:
     PortableCommandAlias: ttui
   InstallerUrl: https://github.com/mikimatsub/T-Tui/releases/download/v{v}/{archive.name}
   InstallerSha256: {sha}
-ManifestType: singleton
+ManifestType: installer
 ManifestVersion: 1.12.0
-'''
-    output.mkdir(parents=True, exist_ok=True)
-    (output / 'mikimatsub.TTUI.yaml').write_text(manifest)
+'''}
+    output.mkdir(parents=True, exist_ok=False)
+    for name, manifest in manifests.items():
+        (output / name).write_text(manifest, encoding='utf-8')
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
