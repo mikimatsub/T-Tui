@@ -12,7 +12,7 @@ Tinder can change these endpoints or send you back to the website to finish veri
 
 The current source is **1.0.0-rc.2**. Linux and native Windows are equal priorities. A stable release is not yet published. [CHANGELOG.md](CHANGELOG.md) records changes, [PLAN.md](PLAN.md) tracks execution, and [docs/RELEASING.md](docs/RELEASING.md) defines release gates.
 
-Check [GitHub Releases](https://github.com/mikimatsub/T-Tui/releases) for standalone x86-64 candidate binaries and their checksums. `@mikimatsub/ttui` is the planned npm convenience package; WinGet is planned after a public stable release and Microsoft review. A downloadable npm tarball in a GitHub release is not an npm registry publication. ARM and macOS are outside the 1.0 support promise.
+The [GitHub release candidate](https://github.com/mikimatsub/T-Tui/releases/tag/v1.0.0-rc.2) provides standalone x86-64 binaries and checksums. The same binaries are available through [@mikimatsub/ttui on npm](https://www.npmjs.com/package/@mikimatsub/ttui). Public-download and npm-registry installation checks passed on Linux and Windows. WinGet is planned after a public stable release and Microsoft review. ARM and macOS are outside the 1.0 support promise.
 
 The release candidate is intended for acceptance testing. Automated checks use fictional accounts; live login, synchronization and mutations still need validation before stable 1.0.
 
@@ -27,6 +27,15 @@ You need:
 ### Install
 
 For a standalone candidate, download the archive for your system and its `.sha256` file from [GitHub Releases](https://github.com/mikimatsub/T-Tui/releases). Compare its SHA-256 before extracting. Linux archives contain `ttui`; Windows archives contain `ttui.exe`. Run the executable directly or put its directory on your PATH. These downloads do not require Node or Rust.
+
+With a Node runtime satisfying the [package's engine requirement](npm/package.json), install the candidate from npm:
+
+```sh
+npm install --global @mikimatsub/ttui@next
+ttui --mock
+```
+
+This package contains both native binaries and has no dependencies, install scripts or runtime binary download. Use the explicit `next` channel above for candidate testing. npm currently also resolves `latest` to this prerelease; a stable version is not available. See the [verification record](docs/VERIFICATION.md).
 
 To build and install from this repository on Linux:
 
