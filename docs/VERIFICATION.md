@@ -1,6 +1,6 @@
 # Release candidate verification
 
-Recorded 2026-10-05 for the work in [PR #1](https://github.com/mikimatsub/T-Tui/pull/1). Check the PR's final commit and its completed runs before release; earlier green runs do not cover later edits.
+Recorded 2026-10-05 for [PR #1](https://github.com/mikimatsub/T-Tui/pull/1), [PR #2](https://github.com/mikimatsub/T-Tui/pull/2) and published candidate `1.0.0-rc.2`. Evidence below identifies the tested commits and channels; it does not establish stable live-account acceptance.
 
 ## Completed local checks
 
@@ -41,10 +41,22 @@ The candidate 1 native Windows executable connected through the selected Chrome 
 
 The Linux candidate from the checked CI run passed the same read-only account checks under Ubuntu 26.04 / WSL2, plus PTY navigation, saved-session restart, isolated sign-out and `0600` config permissions. These were CI artifacts; they were not downloaded from a published release. The selected Windows Chrome profile was imported separately on each OS, without copying Windows-encrypted credentials into Linux.
 
-Published-download checks, token renewal, older history when available, incoming-message behavior, another-account switching and deliberately authorized mutations remain unverified at this checkpoint. PR CI now also runs the release's GNU checksum command against both native archives, so future cross-platform checksum failures are caught before tagging.
+Token renewal, older history when available, incoming-message behavior, another-account switching and deliberately authorized mutations remain unverified. Further live-account testing is paused at the maintainer's request. PR CI now also runs the release's GNU checksum command against both native archives, so future cross-platform checksum failures are caught before tagging.
 
 Follow [RELEASING.md](RELEASING.md) for login/import, refresh, restart, pagination, incoming updates, photos, sign-out and account-switching checks on Linux and Windows. Only a deliberately authorized check may send a message or perform another live mutation. Record date, version and terminal without credentials, personal messages or photos.
 
 The repository became public after the private checks passed. `main` requires a PR and eleven CI/security checks, including Linux and Windows builds, both package jobs and four CodeQL languages; these rules apply to administrators too. Force pushes and deletion are blocked. The release environment accepts only `v*` tags. GitHub secret scanning, push protection, dependency alerts and private vulnerability reporting are enabled. Public CodeQL and the final commit's checks must pass before merging.
 
-Registry ownership/trusted publishing, public archive installation, npm provenance and WinGet validation/acceptance must each be verified independently. The Windows live checks above cover only the listed operations; they do not establish full acceptance. npm publication and WinGet acceptance remain unverified. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation.
+## Published candidate evidence
+
+PR #2 head `67106352787e101752a9881d0707ba226bdb4c63` passed [CI](https://github.com/mikimatsub/T-Tui/actions/runs/37270497710) and [Security](https://github.com/mikimatsub/T-Tui/actions/runs/37270498233). Its merged commit `cdfc8d9e5abb62f800315c0d7ccfe002bbb49926` passed [main CI](https://github.com/mikimatsub/T-Tui/actions/runs/37271411273) and [main Security](https://github.com/mikimatsub/T-Tui/actions/runs/37271411858), including all eleven required checks and no open CodeQL alerts.
+
+Tag `v1.0.0-rc.2` identifies that merged commit. The [complete release run](https://github.com/mikimatsub/T-Tui/actions/runs/37272409231) succeeded, publishing [the candidate](https://github.com/mikimatsub/T-Tui/releases/tag/v1.0.0-rc.2) and passing both Published install jobs. Those jobs downloaded public assets without authentication, verified attestations against the exact source/tag/workflow, and exercised native executables and installed npm-tarball launchers on Ubuntu 22.04 and Windows 2025 runners.
+
+The npm job was intentionally skipped during bootstrap. The authenticated maintainer session subsequently published the original verified tarball as `@mikimatsub/ttui@1.0.0-rc.2` on 2026-10-05 at 06:38:20 UTC. Its SHA-256 is `fab8f7a189aa2ef77960544b89777b3c41990562a7d798761084288e0e3da14e`; the registry's SHA-512 integrity also matches. Separate registry installations on native Windows and Ubuntu WSL matched all ten packaged files to the attested tarball, then passed installed-command version, diagnostics, fictional-account checks and invalid-argument exit checks with isolated data directories.
+
+The registry temporarily returned E404 after successful publication. A retry was rejected because the immutable version already existed; no replacement occurred. The `next` tag resolves correctly, but npm also assigned `latest` to the candidate. Tag-removal attempts with two CLI versions, each after successful browser authentication, returned HTTP 400. This remains a distribution-channel issue; no stable release is claimed.
+
+The trusted publisher was read back from npm with repository `mikimatsub/T-Tui`, workflow `release.yml`, environment `release` and publish permission. `NPM_PUBLISH_ENABLED=true` is configured for future tags. The bootstrap tarball has GitHub build attestation; npm OIDC provenance must be verified after an actual automated publication.
+
+WinGet stable-artifact installation and community acceptance remain pending. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation. The live checks above cover only their listed operations and do not establish full acceptance.

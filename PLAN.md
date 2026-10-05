@@ -1,6 +1,6 @@
 # Execution plan for T-TUI 1.0
 
-Started 2026-10-05. Linux and native Windows have equal priority. The reference is the current `mikimatsub/swsd-mcp` main branch. Implementation is on `codex/1.0-release`, reviewed in [PR #1](https://github.com/mikimatsub/T-Tui/pull/1). The original inventory and priorities remain in [ROADMAP.md](ROADMAP.md).
+Started 2026-10-05. Linux and native Windows have equal priority. The reference is the current `mikimatsub/swsd-mcp` main branch. Implementation was merged through [PR #1](https://github.com/mikimatsub/T-Tui/pull/1) and the checksum correction in [PR #2](https://github.com/mikimatsub/T-Tui/pull/2). The original inventory and priorities remain in [ROADMAP.md](ROADMAP.md).
 
 ## 1. Establish the release baseline
 
@@ -36,10 +36,13 @@ Started 2026-10-05. Linux and native Windows have equal priority. The reference 
 - [x] Add version, archive, package-content and installed-command checks; prepare OIDC publication.
 - [x] Open a reviewable PR and run hosted checks; repair failures with targeted regressions.
 - [x] Make the repository public after the private checks pass; enable required PR checks, protected `main`, tag-only releases, secret push protection and private vulnerability reporting.
-- [ ] Confirm all checks, including public CodeQL, on the final PR commit and the merged release commit.
-- [ ] Establish npm package ownership/authentication and configure the trusted publisher. No long-lived publishing token belongs in the repository.
+- [x] Confirm all checks, including public CodeQL, on the final PR commit and the merged release commit.
+- [x] Establish npm package ownership/authentication and configure the trusted publisher. No long-lived publishing token belongs in the repository.
+- [x] Publish and verify the release candidate from actual public GitHub downloads and npm registry installations on both systems.
+- [ ] Resolve npm's HTTP 400 rejection of candidate `latest` tag removal; `next` correctly resolves to the candidate.
+- [ ] Verify npm OIDC provenance on the next automated publication; bootstrap used the authenticated maintainer session and the existing attested tarball.
 - [ ] Complete the redacted live-account acceptance checklist on both systems before calling the existing service integration stable.
-- [ ] Publish and verify the release candidate from actual public download/registry channels, then promote to 1.0 after acceptance.
+- [ ] Promote to 1.0 after acceptance. Further live-account testing is paused at the maintainer's request while release issues are reviewed.
 - [ ] Validate and test the stable WinGet manifest before submission; record Microsoft acceptance separately.
 
 ## Boundaries and evidence
