@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+binary="$project_dir/target/release/ttui"
+if [[ ! -x "$binary" ]]; then
+  printf 'Building T-TUI for the first launch…\n' >&2
+  cargo build --release --locked --manifest-path "$project_dir/Cargo.toml"
+fi
+exec "$binary" "$@"
