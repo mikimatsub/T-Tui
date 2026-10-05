@@ -91,6 +91,9 @@ impl Default for Config {
 
 impl Config {
     pub fn config_dir() -> PathBuf {
+        if let Some(root) = std::env::var_os("TTUI_DATA_DIR").filter(|s| !s.is_empty()) {
+            return PathBuf::from(root).join("config");
+        }
         let base = dirs::config_dir().unwrap_or_else(|| PathBuf::from("."));
         base.join(APP_NAME)
     }
@@ -100,6 +103,9 @@ impl Config {
     }
 
     pub fn cache_dir() -> PathBuf {
+        if let Some(root) = std::env::var_os("TTUI_DATA_DIR").filter(|s| !s.is_empty()) {
+            return PathBuf::from(root).join("cache");
+        }
         let base = dirs::cache_dir().unwrap_or_else(std::env::temp_dir);
         base.join(APP_NAME)
     }
@@ -117,16 +123,21 @@ impl Config {
 
     pub fn load(mock: bool) -> std::io::Result<Config> {
         let path = Self::config_dir().join(if mock { "demo.json" } else { "config.json" });
+        Self::load_path(path, mock)
+    }
+
+    fn load_path(path: PathBuf, mock: bool) -> std::io::Result<Config> {
         let mut config: Config = match fs::read_to_string(&path) {
-            Ok(contents) => serde_json::from_str(&contents).map_err(|e| {
-                std::io::Error::new(
-                    std::io::ErrorKind::InvalidData,
-                    format!(
-                        "Could not read {}: {e}. Your file has been preserved.",
-                        path.display()
-                    ),
-                )
-            })?,
+            Ok(contents) => serde_json::from_value(crate::secrets::decode(contents.as_bytes())?)
+                .map_err(|e| {
+                    std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        format!(
+                            "Could not read {}: {e}. Your file has been preserved.",
+                            path.display()
+                        ),
+                    )
+                })?,
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => Config::default(),
             Err(e) => return Err(e),
         };
@@ -134,6 +145,27 @@ impl Config {
         config.mock = mock;
         config.normalize();
         Ok(config)
+    }
+
+    pub fn set_identity(&mut self, id: String, name: String) {
+        if self.user_id.as_ref().is_some_and(|old| old != &id) {
+            self.drafts.clear();
+            self.pinned.clear();
+            self.read_at.clear();
+        }
+        self.user_id = Some(id);
+        self.user_name = Some(name);
+    }
+
+    pub fn clear_session(&mut self) {
+        self.auth_token = None;
+        self.refresh_token = None;
+        self.device_id = None;
+        self.user_id = None;
+        self.user_name = None;
+        self.drafts.clear();
+        self.read_at.clear();
+        self.pinned.clear();
     }
 
     pub fn normalize(&mut self) {
@@ -161,7 +193,8 @@ impl Config {
                 options.mode(0o600);
             }
             let mut file = options.open(&temp)?;
-            let json = serde_json::to_vec_pretty(self).map_err(std::io::Error::other)?;
+            let value = serde_json::to_value(self).map_err(std::io::Error::other)?;
+            let json = crate::secrets::encode(value, self.mock)?;
             file.write_all(&json)?;
             file.write_all(b"\n")?;
             file.sync_all()?;
@@ -202,6 +235,60 @@ mod tests {
 #[cfg(test)]
 mod persistence_tests {
     use super::*;
+
+    fn account_config() -> Config {
+        Config {
+            user_id: Some("old-user".into()),
+            user_name: Some("Old name".into()),
+            auth_token: Some("test-auth".into()),
+            refresh_token: Some("test-refresh".into()),
+            device_id: Some("test-device".into()),
+            drafts: [("conversation".into(), "Private draft".into())].into(),
+            pinned: ["conversation".into()].into(),
+            read_at: [("conversation".into(), 123)].into(),
+            theme: Theme::Light,
+            ..Default::default()
+        }
+    }
+
+    #[test]
+    fn changed_identity_clears_account_data_and_preserves_preferences() {
+        let mut config = account_config();
+        config.set_identity("new-user".into(), "New name".into());
+        assert_eq!(config.user_id.as_deref(), Some("new-user"));
+        assert_eq!(config.user_name.as_deref(), Some("New name"));
+        assert!(config.drafts.is_empty());
+        assert!(config.pinned.is_empty());
+        assert!(config.read_at.is_empty());
+        assert_eq!(config.theme, Theme::Light);
+    }
+
+    #[test]
+    fn same_identity_rename_retains_account_data() {
+        let mut config = account_config();
+        config.set_identity("old-user".into(), "Updated name".into());
+        assert_eq!(config.user_id.as_deref(), Some("old-user"));
+        assert_eq!(config.user_name.as_deref(), Some("Updated name"));
+        assert_eq!(config.drafts["conversation"], "Private draft");
+        assert_eq!(config.pinned, ["conversation".into()].into());
+        assert_eq!(config.read_at["conversation"], 123);
+    }
+
+    #[test]
+    fn clear_session_removes_every_secret_and_account_field() {
+        let mut config = account_config();
+        config.clear_session();
+        assert!(config.auth_token.is_none());
+        assert!(config.refresh_token.is_none());
+        assert!(config.device_id.is_none());
+        assert!(config.user_id.is_none());
+        assert!(config.user_name.is_none());
+        assert!(config.drafts.is_empty());
+        assert!(config.pinned.is_empty());
+        assert!(config.read_at.is_empty());
+        assert_eq!(config.theme, Theme::Light);
+    }
+
     #[test]
     fn first_save_and_replacement_are_private_and_atomic() {
         let dir = std::env::temp_dir().join(format!("ttui-config-test-{}", uuid::Uuid::new_v4()));
@@ -222,7 +309,7 @@ mod persistence_tests {
         }
         config.theme = Theme::Light;
         config.save().unwrap();
-        let loaded: Config = serde_json::from_slice(&fs::read(&path).unwrap()).unwrap();
+        let loaded = Config::load_path(path.clone(), false).unwrap();
         assert_eq!(loaded.theme, Theme::Light);
         assert_eq!(loaded.auth_token.as_deref(), Some("test-secret"));
         assert_eq!(fs::read_dir(&dir).unwrap().count(), 1);

@@ -95,6 +95,7 @@ struct MockState {
 
 pub struct MockApi {
     state: Mutex<MockState>,
+    photo_dir: std::path::PathBuf,
 }
 
 impl MockApi {
@@ -245,6 +246,7 @@ impl MockApi {
         };
 
         Self {
+            photo_dir,
             state: Mutex::new(MockState {
                 own,
                 people,
@@ -648,6 +650,9 @@ impl TinderApi for MockApi {
 
     async fn download_photo(&self, url: &str) -> Result<Vec<u8>, ApiError> {
         let path = std::path::Path::new(url);
+        if path.parent() != Some(self.photo_dir.as_path()) {
+            return Err(ApiError::Other("Unknown demo photo".into()));
+        }
         self.ensure_photo(path, Self::seed_for(path))?;
         tokio::time::sleep(Duration::from_millis(300)).await;
         std::fs::read(path).map_err(|e| ApiError::Other(format!("reading mock photo: {e}")))
@@ -660,6 +665,25 @@ mod tests {
 
     fn test_config() -> crate::config::Config {
         crate::config::Config::default()
+    }
+
+    #[tokio::test]
+    async fn photo_download_rejects_outside_paths_without_creating_files() {
+        let root =
+            std::env::temp_dir().join(format!("ttui-photo-boundary-{}", uuid::Uuid::new_v4()));
+        let mut api = MockApi::new(&test_config());
+        api.photo_dir = root.join("owned");
+        std::fs::create_dir_all(&api.photo_dir).unwrap();
+        let outside = root.join("outside.png");
+        for path in [&outside, &api.photo_dir.join("..").join("outside.png")] {
+            let result = api.download_photo(&path.to_string_lossy()).await;
+            assert!(
+                matches!(result, Err(ApiError::Other(message)) if message == "Unknown demo photo")
+            );
+            assert!(!outside.exists());
+        }
+        assert_eq!(std::fs::read_dir(&api.photo_dir).unwrap().count(), 0);
+        std::fs::remove_dir_all(root).unwrap();
     }
 
     #[tokio::test]

@@ -1,0 +1,10 @@
+name: Feature idea
+description: Propose a focused improvement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and proposed behavior
+      description: Explain the user need and the smallest useful change.
+    validations:
+      required: true

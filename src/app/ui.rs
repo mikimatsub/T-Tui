@@ -275,6 +275,8 @@ pub fn draw(f: &mut Frame, app: &App) {
                     "Unmatch {name}?\n\nYou will disappear from each other's inbox. This cannot be undone."
                 )
             }
+        } else if let Some(error) = &app.signout_error {
+            error.clone()
         } else {
             "Remove the saved session and local drafts?\n\nYour Tinder account and conversations stay intact.".into()
         };
@@ -431,9 +433,9 @@ fn draw_login(f: &mut Frame, area: Rect, app: &App, p: Palette) {
 
 fn draw_match_list(f: &mut Frame, area: Rect, app: &App, p: Palette, compact: bool) {
     let title = if app.searching {
-        format!("Search: {}▏", app.search)
+        format!("Search loaded: {}▏", app.search)
     } else if !app.search.is_empty() {
-        format!("Search: {}", app.search)
+        format!("Search loaded: {}", app.search)
     } else {
         format!(
             "Conversations · {} · {}",
@@ -1261,7 +1263,7 @@ fn draw_help(f: &mut Frame, area: Rect, p: Palette, scroll: usize) {
         "",
         "INBOX",
         "j/k or ↑↓ select · Enter chat · → profile · / search",
-        "d discover · s settings · r refresh · Home/End first/last",
+        "d discover · s settings · r refresh · L load more (up to 1,000)",
         "f filter · o sort · p pin · a mark all read (local)",
         "",
         "CONVERSATION",
@@ -1352,6 +1354,7 @@ fn draw_actions(f: &mut Frame, area: Rect, app: &App, p: Palette) {
             ("Pin".into(), Action::Pin),
             ("Read all".into(), Action::MarkAllRead),
             ("Refresh".into(), Action::Key(KeyCode::Char('r'))),
+            ("More".into(), Action::Key(KeyCode::Char('L'))),
         ],
         Screen::Chat => vec![
             back,

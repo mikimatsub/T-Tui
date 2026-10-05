@@ -1,11 +1,14 @@
 mod api;
 mod app;
 pub mod browser;
+mod cache;
 mod config;
 mod graphics;
 mod images;
 mod mock;
 mod photos;
+mod platform;
+mod secrets;
 mod text;
 mod themes;
 
@@ -53,11 +56,15 @@ fn main() -> Result<()> {
     let mut check = false;
     let mut import = false;
     let mut browser_login = false;
+    let mut doctor = false;
+    let mut clear_cache = false;
     for arg in std::env::args().skip(1) {
         match arg.as_str() {
             "--mock" | "--demo" => mock = true,
             "--live" => mock = false,
             "--check" => check = true,
+            "--doctor" => doctor = true,
+            "--clear-cache" => clear_cache = true,
             "--import-session" => import = true,
             "--login" | "--browser-login" => browser_login = true,
             "--version" | "-V" => {
@@ -73,6 +80,39 @@ fn main() -> Result<()> {
             }
             _ => bail!("Unknown argument {arg:?}. Run ttui --help."),
         }
+    }
+    if doctor {
+        println!(
+            "T-TUI {} | {} {}",
+            env!("CARGO_PKG_VERSION"),
+            std::env::consts::OS,
+            std::env::consts::ARCH
+        );
+        println!(
+            "Interactive input/output: {}/{}",
+            std::io::stdin().is_terminal(),
+            std::io::stdout().is_terminal()
+        );
+        println!(
+            "Credential storage: {}",
+            if cfg!(windows) {
+                "Windows current-user DPAPI"
+            } else {
+                "owner-readable config (0600)"
+            }
+        );
+        println!("Photo cache: 256 MiB / 7 days. Use --clear-cache with T-TUI closed.");
+        println!(
+            "No account data read and no network requests sent. Use --check for account connectivity."
+        );
+        return Ok(());
+    }
+    if clear_cache {
+        println!(
+            "Removed {} cached photos.",
+            cache::prune(&Config::photo_cache_dir(), true)?
+        );
+        return Ok(());
     }
     if !check
         && !import
@@ -108,6 +148,9 @@ fn main() -> Result<()> {
         .enable_all()
         .build()?;
     if browser_login {
+        if mock {
+            bail!("Browser login is unavailable in offline demo mode.");
+        }
         println!("Opening browser to https://tinder.com...");
         let _ = browser::open_browser_to_tinder();
         println!("Waiting for Tinder login in your browser (press Ctrl-C to cancel)...");
@@ -122,8 +165,7 @@ fn main() -> Result<()> {
                 config.auth_token = Some(tok.clone());
                 config.device_id = Some(dev.clone());
                 config.refresh_token = ref_tok.clone();
-                config.user_id = Some(own.id.clone());
-                config.user_name = Some(own.name.clone());
+                config.set_identity(own.id.clone(), own.name.clone());
                 config.save()?;
                 api.apply_auth(tok, dev, ref_tok);
                 println!(
@@ -142,8 +184,7 @@ fn main() -> Result<()> {
     if import {
         return rt.block_on(async move {
             let own = api.get_own_user().await?;
-            config.user_id = Some(own.id);
-            config.user_name = Some(own.name);
+            config.set_identity(own.id, own.name);
             config.save()?;
             println!("Session verified and saved locally. Open ./ttui to continue.");
             Ok(())

@@ -1,0 +1,143 @@
+name: CI
+on:
+  push:
+    branches: [main, 'codex/**']
+  pull_request:
+  workflow_call:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  CARGO_TERM_COLOR: always
+jobs:
+  native:
+    name: Native (${{ matrix.platform }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux-x64
+            target: x86_64-unknown-linux-gnu
+            exe: ttui
+          - os: windows-2025
+            platform: win32-x64
+            target: x86_64-pc-windows-msvc
+            exe: ttui.exe
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14.8'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.21.0'
+      - name: Install Rust toolchain
+        run: rustup toolchain install 1.99.0 --profile minimal --component clippy,rustfmt
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: rust-${{ matrix.target }}-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml', '.cargo/config.toml') }}
+      - name: Format
+        run: cargo fmt --all -- --check
+      - name: Clippy
+        run: cargo clippy --locked --all-targets -- -D warnings
+      - name: Tests
+        run: cargo test --locked
+      - name: Version and launcher checks
+        run: |
+          python scripts/release.py check
+          node --test scripts/package.test.mjs
+      - name: Release build
+        run: cargo build --release --locked --target ${{ matrix.target }}
+      - name: CLI smoke
+        shell: bash
+        run: |
+          export TTUI_DATA_DIR="$RUNNER_TEMP/ttui-smoke"
+          target/${{ matrix.target }}/release/${{ matrix.exe }} --doctor
+          target/${{ matrix.target }}/release/${{ matrix.exe }} --mock --check
+      - name: Install terminal test dependencies
+        run: python -m pip install --require-hashes -r scripts/test-requirements.txt
+      - name: Linux real-terminal checks
+        if: runner.os == 'Linux'
+        run: python scripts/pty_e2e.py --binary target/${{ matrix.target }}/release/ttui --artifacts target/terminal-evidence
+      - name: Windows real-terminal checks
+        if: runner.os == 'Windows'
+        run: python scripts/windows_e2e.py --binary target/${{ matrix.target }}/release/ttui.exe
+      - name: Archive native build
+        run: python scripts/release.py native --platform ${{ matrix.platform }} --binary target/${{ matrix.target }}/release/${{ matrix.exe }}
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: native-${{ matrix.platform }}
+          path: dist/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: failure()
+        with:
+          name: terminal-evidence-${{ matrix.platform }}
+          path: target/terminal-evidence
+
+  package:
+    name: Package (${{ matrix.os }})
+    needs: native
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, windows-2025]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.14.8'
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24.21.0'
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          pattern: native-*
+          path: dist
+          merge-multiple: true
+      - run: python scripts/release.py bundle --artifacts dist --output target/npm-stage
+      - run: python scripts/package_smoke.py
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: runner.os == 'Linux'
+        with:
+          name: npm-package
+          path: dist/*.tgz
+          if-no-files-found: error
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-22.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - run: rustup toolchain install 1.99.0 --profile minimal --component llvm-tools-preview
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/bin/cargo-llvm-cov
+            target
+          key: coverage-${{ hashFiles('Cargo.lock', 'rust-toolchain.toml') }}-0.9.1
+      - run: cargo install cargo-llvm-cov --version 0.9.1 --locked
+      - run: cargo llvm-cov --locked --lcov --output-path target/lcov.info
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage
+          path: target/lcov.info
+          if-no-files-found: error

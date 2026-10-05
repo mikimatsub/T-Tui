@@ -1,0 +1,20 @@
+name: Bug report
+description: Report a reproducible problem without account data
+body:
+  - type: markdown
+    attributes:
+      value: Never attach tokens, copied cURL requests, real conversations, profiles, or browser storage. Use the offline demo when possible.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Paste ttui --doctor output, plus terminal name and version.
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction and expected result
+      description: Include steps, actual behavior, and whether it occurs in --mock mode.
+    validations:
+      required: true
