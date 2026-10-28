@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+
+- README demo tour and screenshots recaptured in a graphics-capable terminal, so photos render as real pixels instead of text-cell blocks; the tour is now an animated WebP (`docs/assets/demo.webp`) to keep gradients smooth.
+
 ### Fixed
 
 - Release workflow now passes the npm tarball as a local path (`./dist/*.tgz`) so `npm publish` no longer treats it as a GitHub shorthand, and add an npm-only recovery path (`workflow_dispatch` on a `<tag>-npm-recovery` tag) that publishes the attested tarball from an existing release.
