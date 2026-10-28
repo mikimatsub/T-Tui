@@ -4,7 +4,7 @@
 
 ### Fixed
 
-- Release workflow now passes the npm tarball as a local path (`./dist/*.tgz`) so `npm publish` no longer treats it as a GitHub shorthand.
+- Release workflow now passes the npm tarball as a local path (`./dist/*.tgz`) so `npm publish` no longer treats it as a GitHub shorthand, and add an npm-only recovery path (`workflow_dispatch` on a `<tag>-npm-recovery` tag) that publishes the attested tarball from an existing release.
 
 ## 1.0.0 (2026-10-27)
 

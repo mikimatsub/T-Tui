@@ -1,7 +1,16 @@
 name: Release
 on:
   push:
-    tags: ['v*']
+    tags: ['v*', '!v*-npm-recovery']
+  # npm-only recovery: dispatch on a `<tag>-npm-recovery` tag (the release
+  # environment only admits v* tags). It republishes nothing else and never
+  # rebuilds; it publishes the attested tarball from the existing release.
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Existing release tag whose attested npm tarball should be published (e.g. v1.0.0)
+        required: true
+        type: string
 permissions:
   contents: read
 concurrency:
@@ -9,8 +18,10 @@ concurrency:
   cancel-in-progress: false
 jobs:
   ci:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/ci.yml
   security:
+    if: github.event_name == 'push'
     uses: ./.github/workflows/security.yml
     permissions:
       contents: read
@@ -125,6 +136,49 @@ jobs:
       - name: Publish tested tarball through trusted publishing
         env:
           RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          channel=latest
+          if [[ "$RELEASE_TAG" == *-* ]]; then channel=next; fi
+          npm publish ./dist/*.tgz --provenance --access public --tag "$channel" --ignore-scripts
+  npm-recover:
+    name: Recover npm publication
+    if: >-
+      github.event_name == 'workflow_dispatch' &&
+      vars.NPM_PUBLISH_ENABLED == 'true' &&
+      github.ref_type == 'tag' &&
+      github.ref_name == format('{0}-npm-recovery', inputs.release_tag)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+      attestations: read
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24.22.1'
+          registry-url: https://registry.npmjs.org
+      - name: Download and verify the attested release tarball
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          REPO: ${{ github.repository }}
+        run: |
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]] || { echo "bad tag"; exit 1; }
+          mkdir dist
+          gh release download "$RELEASE_TAG" -R "$REPO" -p '*.tgz' -D dist
+          f=$(ls dist/*.tgz); [ "$(ls dist/*.tgz | wc -l)" = 1 ]
+          gh attestation verify "$f" -R "$REPO" \
+            --signer-workflow "$REPO/.github/workflows/release.yml" \
+            --source-ref "refs/tags/$RELEASE_TAG"
+          name=$(tar xzOf "$f" package/package.json | jq -r .name)
+          version=$(tar xzOf "$f" package/package.json | jq -r .version)
+          [ "v$version" = "$RELEASE_TAG" ] || { echo "version mismatch"; exit 1; }
+          if npm view "$name@$version" version >/dev/null 2>&1; then echo "$name@$version already on npm"; exit 1; fi
+      - name: Publish attested tarball through trusted publishing
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
           channel=latest
           if [[ "$RELEASE_TAG" == *-* ]]; then channel=next; fi
