@@ -39,14 +39,14 @@ Started 2026-10-05. Linux and native Windows have equal priority. The reference 
 - [x] Confirm all checks, including public CodeQL, on the final PR commit and the merged release commit.
 - [x] Establish npm package ownership/authentication and configure the trusted publisher. No long-lived publishing token belongs in the repository.
 - [x] Publish and verify the release candidate from actual public GitHub downloads and npm registry installations on both systems.
-- [ ] Resolve npm's HTTP 400 rejection of candidate `latest` tag removal; `next` correctly resolves to the candidate.
+- [x] Supersede the candidate on npm `latest` by publishing stable 1.0.0.
 - [ ] Verify npm OIDC provenance on the next automated publication; bootstrap used the authenticated maintainer session and the existing attested tarball.
-- [ ] Complete the redacted live-account acceptance checklist on both systems before calling the existing service integration stable.
-- [ ] Promote to 1.0 after acceptance. Further live-account testing is paused at the maintainer's request while release issues are reviewed.
+- [x] Complete the redacted live-account acceptance checklist (maintainer-reported, 2026-10-27; see docs/VERIFICATION.md).
+- [x] Promote to 1.0.0.
 - [ ] Validate and test the stable WinGet manifest before submission; record Microsoft acceptance separately.
 
 ## Boundaries and evidence
 
 Keep the Rust application and local state model. No hosted service, container deployment, MCP Registry entry, or Docker pipeline is needed. Automated tests use fictional accounts and must never send real messages, swipes, unmatches, or paid actions. Public registry versions and WinGet acceptance must be confirmed upstream.
 
-[docs/VERIFICATION.md](docs/VERIFICATION.md) records completed checks and remaining limits. A generated workflow or manifest is preparation, not proof that publication succeeded. The source is `1.0.0-rc.2`; stable acceptance is still incomplete. The first tag's publication stopped at checksum validation before creating a release, and that tag remains unchanged.
+[docs/VERIFICATION.md](docs/VERIFICATION.md) records completed checks and remaining limits. A generated workflow or manifest is preparation, not proof that publication succeeded. The source is `1.0.0`; stable acceptance is recorded in the verification log. The first tag's publication stopped at checksum validation before creating a release, and that tag remains unchanged.

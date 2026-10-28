@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 (2026-10-27)
+
+First stable release. The maintainer verified the real-account workflows listed in [docs/VERIFICATION.md](docs/VERIFICATION.md).
 
 - Rebuild the README as a product landing page: banner, animated offline-demo tour, feature grid, screenshots, install and requirements, FAQ and collapsible reference sections. Images use absolute URLs so they also display on npm. Add a social preview image and allow running the Security workflow manually.
 - Show sharp Sixel photos in Windows Terminal 1.22 and later (detected with a bounded terminal query; other Windows consoles keep the text fallback).
