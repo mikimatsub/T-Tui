@@ -8,9 +8,9 @@
 
 [**Install**](#-install) · [**Features**](#-features) · [**Screenshots**](#-screenshots) · [**Keys**](#%EF%B8%8F-keyboard-shortcuts) · [**FAQ**](#-faq) · [**Releases**](https://github.com/mikimatsub/T-Tui/releases)
 
-<img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/tour.webp" alt="Animated tour of the offline demo in a graphics-capable terminal: inbox with photo previews, discovery photo carousel, chat and a full profile, all with fictional data" width="860">
+<img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/tour.webp" alt="Animated tour of the offline demo with AI-generated faces of people who do not exist: inbox with photo previews, discovery photo carousel, chat and a full profile, all with fictional data" width="860">
 
-<sub>Recorded from <code>ttui --mock</code>. Every profile and photo is fictional.</sub>
+<sub>Recorded from <code>ttui --mock</code>. Every profile is fictional; the faces are AI-generated and depict no real person (<a href="https://github.com/mikimatsub/T-Tui/tree/main/docs/demo-faces">details</a>).</sub>
 
 </div>
 
