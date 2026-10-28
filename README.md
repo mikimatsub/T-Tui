@@ -1,5 +1,11 @@
 # T-TUI
 
+[![CI](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml)
+[![Security](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml)
+[![npm version](https://img.shields.io/npm/v/@mikimatsub/ttui.svg)](https://www.npmjs.com/package/@mikimatsub/ttui)
+[![GitHub release](https://img.shields.io/github/v/release/mikimatsub/T-Tui?include_prereleases)](https://github.com/mikimatsub/T-Tui/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+
 **Terminal client for Tinder.** Discover people, browse profiles, keep up with conversations, and edit your bio and discovery preferences with the keyboard or the mouse.
 
 The session lives only on this machine. Tokens are masked and saved atomically: Unix uses owner-readable (`0600`) files; Windows protects credentials with current-user DPAPI. Drafts and settings remain readable JSON. T-TUI parses a pasted cURL command for headers and does not execute it. It does not bypass verification, buy credits, or submit reports.
@@ -15,6 +21,8 @@ The current source is **1.0.0-rc.2**. Linux and native Windows are equal priorit
 The [GitHub release candidate](https://github.com/mikimatsub/T-Tui/releases/tag/v1.0.0-rc.2) provides standalone x86-64 binaries and checksums. The same binaries are available through [@mikimatsub/ttui on npm](https://www.npmjs.com/package/@mikimatsub/ttui). Public-download and npm-registry installation checks passed on Linux and Windows. WinGet is planned after a public stable release and Microsoft review. ARM and macOS are outside the 1.0 support promise.
 
 The release candidate is intended for acceptance testing. Automated checks use fictional accounts; live login, synchronization and mutations still need validation before stable 1.0.
+
+---
 
 ## Quick start
 
@@ -94,6 +102,8 @@ A healthy session prints `Account connection: OK`, then inbox, history, profile,
 | `ttui --clear-cache` | Remove managed cached photos; run with T-TUI closed. |
 | `ttui --help`, `ttui -h` | Print usage and the config path. |
 
+---
+
 ## Connect your account
 
 ### Browser login
@@ -124,6 +134,8 @@ On Linux you can import the clipboard without printing the request:
 wl-paste --no-newline | ttui --import-session
 ttui --check
 ```
+
+---
 
 ## Everyday keys
 
@@ -162,6 +174,8 @@ Included palettes: T-TUI Dark (the default), T-TUI Light, Dracula, Catppuccin Mo
 
 Inbox tools are All, Unread, New, Drafts, and Pinned filters, Recent, Name, and Newest sorting, search across names and message previews, persistent pins, and local read markers. Pinned conversations sort first. Filters and search apply only to loaded conversations. **More** or uppercase **L** expands the session limit by 100, up to 1,000. It refetches the expanded inbox through existing server pagination. Pins and read markers stay on this device.
 
+---
+
 ## Configuration
 
 | Name | Default | Notes |
@@ -188,6 +202,8 @@ Unmatch asks for confirmation. Local conversation state is removed after the ser
 
 Sign out, after confirmation, removes the saved credentials, drafts, and read markers from this machine. Your Tinder account and the conversations on the server stay. The photo cache stays on disk, capped at 256 MiB and seven days; close T-TUI and use `--clear-cache` to remove it.
 
+---
+
 ## Build and verify
 
 Day-to-day use stops at [Quick start](#quick-start). This section is for changing the source.
@@ -205,14 +221,24 @@ Unit and HTTP contract tests cover session recovery, stale responses, message ac
 
 After editing source, run `./scripts/install.sh` to refresh the installed command. For the project launcher only, `cargo build --release --locked` is enough. `./ttui` uses the release binary when it is already built.
 
+---
+
 ## Documentation
 
-- [FEATURES.md](FEATURES.md): implemented workflows, website-only gaps, how the tests are bounded, and the API sources used on 2026-09-18
-- [PROGRESS.md](PROGRESS.md): what landed in 0.3.0 and the checks that were run
+- [`FEATURES.md`](./FEATURES.md): implemented workflows, website-only gaps, how the tests are bounded, and the API sources used on 2026-09-18
+- [`SECURITY.md`](./SECURITY.md): local storage and private vulnerability reporting
+- [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md): community expectations and private reporting
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md): toolchain, checks to run, and commit conventions
+- [`CHANGELOG.md`](./CHANGELOG.md): version history
+- [`PROGRESS.md`](./PROGRESS.md): what landed in 0.3.0 and the checks that were run
+- [`docs/RELEASING.md`](./docs/RELEASING.md): release gates
+- [`docs/VERIFICATION.md`](./docs/VERIFICATION.md): publication and install verification record
+
+---
 
 ## License
 
-[MIT](LICENSE). See [SECURITY.md](SECURITY.md) for local storage and reporting guidance.
+MIT: see [LICENSE](./LICENSE). Provided "as is" without warranty.
 
 ## Trademarks
 
