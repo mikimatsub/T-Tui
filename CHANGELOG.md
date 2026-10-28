@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Sending a message now saves the cleared draft immediately, so a crash or forced close right after sending cannot bring the sent text back as a draft. The Windows end-to-end test waits for the app to be ready and polls the saved file instead of sleeping.
+
 ## 1.0.1 (2026-10-28)
 
 ### Docs

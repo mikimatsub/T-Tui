@@ -40,6 +40,23 @@ def main():
                 pump()
                 if text in '\n'.join(screen.display): return
             raise AssertionError(f'Missing {text!r}\n' + '\n'.join(screen.display))
+        def wait_gone(text):
+            # Avoid matching a stale frame: wait until the previous screen is gone.
+            end = time.monotonic() + 12
+            while time.monotonic() < end:
+                pump(.1)
+                if text not in '\n'.join(screen.display): return
+            raise AssertionError(f'Still showing {text!r}\n' + '\n'.join(screen.display))
+        def drafts():
+            try: return json.loads(config.read_text(encoding='utf-8')).get('drafts', {})
+            except (OSError, ValueError): return None  # file mid-write; poll again
+        def wait_drafts(check, message, timeout=10):
+            end = time.monotonic() + timeout
+            while time.monotonic() < end:
+                pump(.1)
+                current = drafts()
+                if current is not None and check(current): return
+            raise AssertionError(f'{message}: {drafts()!r}\n' + '\n'.join(screen.display))
         def send(text):
             proc.write(text)
             pump()
@@ -51,16 +68,23 @@ def main():
             send('\x1b[200~Windows draft 日本語 🦀\nsecond line\x1b[201~')
             wait('Windows draft')
             send('\x1b')
+            wait_gone('Ctrl-P profile')
             wait('Conversations')
-            pump(1)
-            saved = json.loads(config.read_text(encoding='utf-8'))
-            assert 'Windows draft 日本語 🦀\nsecond line' in saved['drafts'].values(), repr(saved['drafts'])
+            draft = 'Windows draft 日本語 🦀\nsecond line'
+            wait_drafts(lambda d: draft in d.values(), 'Draft was not persisted')
             send('\r')
             wait('Ctrl-P profile')
+            # The composer is ready once the restored draft is shown in the Message box.
+            wait('Message ─')
+            end = time.monotonic() + 12
+            while 'Windows draft' not in '\n'.join(screen.display[-8:]):
+                if time.monotonic() > end: raise AssertionError('Draft not restored in composer\n' + '\n'.join(screen.display))
+                pump(.1)
             send('\x13')
-            pump(1)
+            wait_drafts(lambda d: not any(d.values()), 'Ctrl-S did not send the demo draft')
+            wait('Write something')
             send('\x1b')
-            assert not any(json.loads(config.read_text(encoding='utf-8'))['drafts'].values()), 'Ctrl-S did not send the demo draft'
+            wait_gone('Ctrl-P profile')
             send('s')
             wait('Sync interval')
             send('\x1b')

@@ -939,6 +939,9 @@ impl App {
         self.input.clear();
         self.cursor = 0;
         self.config.drafts.remove(&mid);
+        // Persist the cleared draft now so a crash or kill cannot resurrect sent text.
+        self.draft_changed = None;
+        self.save_config();
         self.msg_scroll = 0;
         let api = self.api.clone();
         self.spawn(async move {
