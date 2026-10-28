@@ -1,4 +1,4 @@
-# Release candidate verification
+# Release verification
 
 Recorded 2026-10-05 for [PR #1](https://github.com/mikimatsub/T-Tui/pull/1), [PR #2](https://github.com/mikimatsub/T-Tui/pull/2) and published candidate `1.0.0-rc.2`. Evidence below identifies the tested commits and channels; it does not establish stable live-account acceptance.
 
@@ -60,3 +60,25 @@ The registry temporarily returned E404 after successful publication. A retry was
 The trusted publisher was read back from npm with repository `mikimatsub/T-Tui`, workflow `release.yml`, environment `release` and publish permission. `NPM_PUBLISH_ENABLED=true` is configured for future tags. The bootstrap tarball has GitHub build attestation; npm OIDC provenance must be verified after an actual automated publication.
 
 WinGet stable-artifact installation and community acceptance remain pending. Renovate configuration inherits the shared policy; app access to this repository still needs confirmation. The live checks above cover only their listed operations and do not establish full acceptance.
+
+## 1.0.0 stable acceptance (2026-10-27)
+
+Redacted maintainer checklist. No credentials, messages, photos or other personal data are recorded.
+
+| Item | Result |
+| --- | --- |
+| Date | 2026-10-27 |
+| Version | 1.0.0 (source identical to the merged release PR) |
+| Terminal | Windows Terminal (Windows 11), maintainer's own setup |
+| Verified by | Maintainer, per his report |
+| Login / session import, restart, refresh | Verified by maintainer |
+| Inbox and history pagination, incoming updates | Verified by maintainer |
+| Photos (including sharp Sixel photos in Windows Terminal) | Verified by maintainer |
+| Sign-out and account switching | Verified by maintainer |
+| Deliberately authorized mutations: sending messages, Like/Pass, profile edits, unmatch, credit actions | Verified by maintainer |
+
+Linux real-account read-only checks were recorded for the candidate above; the maintainer's 2026-10-27 report covers his own setup. Automated tests still use fictional data only.
+
+**Tinder terms decision.** The maintainer reviewed the risk of distributing an unofficial client of a private service and decided to publish. Noncommercial status does not grant API permission; the README carries an unofficial-client disclaimer.
+
+**Clean-install smoke checks.** Clean Linux and Windows installs are covered by the CI package jobs and by the release workflow's Published install jobs, which download the public assets without authentication on fresh Ubuntu 22.04 and Windows 2025 runners, verify attestations and run the native executables and npm launchers with isolated data. The clean Windows user-profile check is maintainer-reported.

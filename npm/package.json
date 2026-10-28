@@ -1,6 +1,6 @@
 {
   "name": "@mikimatsub/ttui",
-  "version": "1.0.0-rc.2",
+  "version": "1.0.0",
   "description": "T-TUI native terminal client for Linux and Windows",
   "license": "MIT",
   "type": "module",
