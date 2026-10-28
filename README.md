@@ -30,7 +30,7 @@ You need:
 
 - A matching standalone binary from GitHub Releases, or Rust and Cargo to build from source
 - An interactive terminal. The layout works from 50 × 16 cells. 100 × 30 or larger shows the full split view
-- For sharp photos, a terminal with native graphics, such as Foot (Sixel), Kitty, or iTerm2. Other terminals use a truecolor text fallback
+- For sharp photos, a terminal with native graphics, such as Foot (Sixel), Kitty, iTerm2, or Windows Terminal 1.22 and later (Sixel). Other terminals use a truecolor text fallback
 
 ### Install
 

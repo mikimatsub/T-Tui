@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Show sharp Sixel photos in Windows Terminal 1.22 and later (detected with a bounded terminal query; other Windows consoles keep the text fallback).
 - Restyle the README to match the maintainer's project page style (status badges, section dividers, a complete documentation index) and add a Code of Conduct and issue template contact links.
 - Update rustls 0.23.46, rustls-webpki 0.103.16, webpki-root-certs 1.0.11 and tokio 1.54.1 to fix RUSTSEC-2026-0346 to 0349, 0382, 0383 and 0386, plus other semver-compatible Cargo updates past the three-day release soak.
 - Update the test-only Python requirements: Pillow 13.0.0 (fixes its published advisories), wcwidth 0.9.4 and pywinpty 3.1.0.
