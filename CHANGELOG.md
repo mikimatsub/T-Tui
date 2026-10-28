@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Docs
+
+- README tour and screenshots now show AI-generated faces of people who do not exist instead of gradient placeholders. The faces live in `docs/demo-faces` (provenance documented) and are loaded only when `TTUI_DEMO_PHOTOS` is set, so the shipped package does not grow.
+
 ### Fixed
 
 - Sending a message now saves the cleared draft immediately, so a crash or forced close right after sending cannot bring the sent text back as a draft. The Windows end-to-end test waits for the app to be ready and polls the saved file instead of sleeping.

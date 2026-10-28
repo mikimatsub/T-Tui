@@ -1,6 +1,7 @@
 //! Offline mock implementation of [`TinderApi`] for development and demos.
 //! Data is deterministic; photos are generated gradient PNGs written to the
-//! photo cache on first access. Simulates auto-replies and a delayed new
+//! photo cache on first access, or synthetic faces from `TTUI_DEMO_PHOTOS`
+//! when capturing README media. Simulates auto-replies and a delayed new
 //! match so the polling UI has something to show.
 
 use std::collections::{HashMap, HashSet};
@@ -265,6 +266,16 @@ impl MockApi {
 
     /// Generate (or reuse) a gradient PNG for the given photo path.
     fn ensure_photo(&self, path: &std::path::Path, seed: u64) -> Result<(), ApiError> {
+        if let Some(dir) = std::env::var_os("TTUI_DEMO_PHOTOS")
+            && let Some(img) = Self::demo_photo(std::path::Path::new(&dir), path)
+        {
+            if let Some(parent) = path.parent() {
+                std::fs::create_dir_all(parent).map_err(|e| ApiError::Other(e.to_string()))?;
+            }
+            return img
+                .save(path)
+                .map_err(|e| ApiError::Other(format!("saving mock photo: {e}")));
+        }
         if path.exists() {
             return Ok(());
         }
@@ -301,6 +312,25 @@ impl MockApi {
         image::DynamicImage::ImageRgba8(img)
             .save(path)
             .map_err(|e| ApiError::Other(format!("saving mock photo: {e}")))
+    }
+
+    /// Load a screenshot-capture face for `mock-user-N_J.png` from
+    /// `dir/mock-user-N.jpg` (see docs/demo-faces). Later photos in a profile
+    /// are flipped or zoomed variants so the carousel visibly changes.
+    fn demo_photo(dir: &std::path::Path, path: &std::path::Path) -> Option<image::DynamicImage> {
+        let stem = path.file_stem()?.to_str()?;
+        let (person, index) = stem.rsplit_once('_')?;
+        let index: u32 = index.parse().ok()?;
+        let img = image::open(dir.join(format!("{person}.jpg"))).ok()?;
+        let img = if index % 2 == 1 { img.fliph() } else { img };
+        Some(if index >= 2 {
+            let (w, h) = (img.width(), img.height());
+            let (cw, ch) = (w * 4 / 5, h * 4 / 5);
+            img.crop_imm((w - cw) / 2, (h - ch) / 3, cw, ch)
+                .resize_exact(w, h, image::imageops::FilterType::Lanczos3)
+        } else {
+            img
+        })
     }
 
     /// Derive a deterministic "seed" from a path so photos are stable.
