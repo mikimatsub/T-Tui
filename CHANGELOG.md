@@ -2,9 +2,15 @@
 
 ## Unreleased
 
+## 1.0.1 (2026-10-28)
+
+### Docs
+
+- Docs: refreshed README screenshots and animated tour on npm.
+
 ### Changed
 
-- README demo tour and screenshots recaptured in a graphics-capable terminal, so photos render as real pixels instead of text-cell blocks; the tour is now an animated WebP (`docs/assets/demo.webp`) to keep gradients smooth.
+- README demo tour and screenshots recaptured in a graphics-capable terminal, so photos render as real pixels instead of text-cell blocks; the tour is now an animated WebP (`docs/assets/tour.webp`) to keep gradients smooth.
 
 ### Fixed
 
