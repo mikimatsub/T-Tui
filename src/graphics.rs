@@ -287,9 +287,24 @@ fn detect_picker() -> Picker {
     }
 }
 
+/// Windows Terminal 1.22+ supports Sixel and answers the capability, cell-size
+/// (`CSI 16 t`) and status queries, so the library's bounded query is safe
+/// there. Other Windows consoles (classic conhost, older terminals) may never
+/// answer, which could swallow a keystroke, so they keep the text fallback.
 #[cfg(not(unix))]
 fn detect_picker() -> Picker {
-    Picker::halfblocks()
+    if !is_windows_terminal(std::env::var_os("WT_SESSION").as_deref()) {
+        return Picker::halfblocks();
+    }
+    match Picker::from_query_stdio() {
+        Ok(picker) if picker.protocol_type() != ProtocolType::Halfblocks => picker,
+        _ => Picker::halfblocks(),
+    }
+}
+
+#[cfg_attr(unix, allow(dead_code))]
+fn is_windows_terminal(wt_session: Option<&std::ffi::OsStr>) -> bool {
+    wt_session.is_some_and(|v| !v.is_empty())
 }
 
 fn encode(
@@ -326,6 +341,13 @@ mod tests {
         let mut picker = Picker::from_fontsize(ratatui_image::FontSize::new(10, 20));
         picker.set_protocol_type(ProtocolType::Sixel);
         picker
+    }
+
+    #[test]
+    fn only_windows_terminal_is_queried_on_windows() {
+        assert!(is_windows_terminal(Some(std::ffi::OsStr::new("a1b2"))));
+        assert!(!is_windows_terminal(Some(std::ffi::OsStr::new(""))));
+        assert!(!is_windows_terminal(None));
     }
 
     #[test]
