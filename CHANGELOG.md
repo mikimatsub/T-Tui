@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Update rustls 0.23.46, rustls-webpki 0.103.16, webpki-root-certs 1.0.11 and tokio 1.54.1 to fix RUSTSEC-2026-0346 to 0349, 0382, 0383 and 0386, plus other semver-compatible Cargo updates past the three-day release soak.
+- Update the test-only Python requirements: Pillow 13.0.0 (fixes its published advisories), wcwidth 0.9.4 and pywinpty 3.1.0.
+- Update Rust to 1.99.1, CI Node to 24.22.1, and pinned GitHub Actions (setup-node, setup-python, upload/download-artifact, CodeQL bundle 2.27.3, OSV-Scanner 2.7.0).
+- Document a narrow, expiring OSV-Scanner suppression for block-buffer GHSA-qwgh-2vcv-g2f7, which is in the lockfile but never compiled into T-TUI.
+
 ## 1.0.0-rc.2 (2026-10-05)
 
 - Write archive checksum files with LF line endings on both platforms. The first candidate stopped before publication because GNU `sha256sum` interpreted the Windows CRLF terminator as part of the archive filename. The packaging regression now compares raw bytes so text-mode normalization cannot hide this failure.
