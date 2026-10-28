@@ -15,7 +15,7 @@ node --test scripts/package.test.mjs
 python -m unittest discover -s scripts -p test_release.py -v
 ```
 
-On machines whose rustup default host is GNU, use the explicitly installed MSVC toolchain for Windows (`cargo +1.99.0-x86_64-pc-windows-msvc ...`). Tool versions and publication dates are recorded in [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md).
+On machines whose rustup default host is GNU, use the explicitly installed MSVC toolchain for Windows (`cargo +1.99.1-x86_64-pc-windows-msvc ...`). Tool versions and publication dates are recorded in [docs/TOOLCHAIN.md](docs/TOOLCHAIN.md).
 
 Install terminal-test dependencies in a virtual environment with `python -m pip install --require-hashes -r scripts/test-requirements.txt`. Linux runs `python scripts/pty_e2e.py --binary target/release/ttui`; Windows runs `python scripts/windows_e2e.py --binary target/release/ttui.exe`. These tests use fictional data and temporary directories. The browser-storage integration test is intentionally ignored unless explicitly requested with `--ignored`.
 
