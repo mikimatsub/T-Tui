@@ -1,0 +1,13 @@
+# OSV-Scanner configuration
+# https://google.github.io/osv-scanner/configuration/
+#
+# Each suppression must state why T-TUI is not affected and expire so it is
+# reviewed again.
+
+[[IgnoredVulns]]
+id = "GHSA-qwgh-2vcv-g2f7"
+ignoreUntil = 2027-01-31
+reason = """block-buffer 0.10.4 is only an optional transitive entry in Cargo.lock \
+(sha2 -> wezterm-blob-leases, behind a backend feature T-TUI does not enable). \
+`cargo tree -i block-buffer --target all -e all --all-features` prints nothing, so it \
+is never compiled into ttui. No fixed 0.10.x release exists. Re-check on expiry."""

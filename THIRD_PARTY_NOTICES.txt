@@ -60,14 +60,14 @@ Source: https://crates.io/crates/autocfg/1.5.1
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 99afaa30c17801207692138b8a7d9f7522b52711dabb4cde25855dadc950e4c8
 
-aws-lc-rs 1.18.1
+aws-lc-rs 1.18.2
 Declared license: ISC AND (Apache-2.0 OR ISC)
-Source: https://crates.io/crates/aws-lc-rs/1.18.1
+Source: https://crates.io/crates/aws-lc-rs/1.18.2
   LICENSE: efbbbcefb4b8588630bec285cd7372a4dc3eb208a6c457d4313f62cb10f87aa3
 
-aws-lc-sys 0.45.0
+aws-lc-sys 0.46.0
 Declared license: ISC AND (Apache-2.0 OR ISC) AND Apache-2.0 AND MIT AND BSD-3-Clause AND (Apache-2.0 OR ISC OR MIT) AND (Apache-2.0 OR ISC OR MIT-0)
-Source: https://crates.io/crates/aws-lc-sys/0.45.0
+Source: https://crates.io/crates/aws-lc-sys/0.46.0
   LICENSE: 49f5cc2a2e4db6cc86cc1c853cbf00af70abd12c55dae8d6561f26ccd1bfd162
   aws-lc/LICENSE: 49f5cc2a2e4db6cc86cc1c853cbf00af70abd12c55dae8d6561f26ccd1bfd162
   aws-lc/third_party/fiat/LICENSE: c86c0f590ac954babf892ba6b03c50c00cdf326ddfd0ad31ed0ec16abdaada52
@@ -160,9 +160,9 @@ Declared license: MIT
 Source: https://crates.io/crates/castaway/0.2.4
   LICENSE: 936b4d7e9de4afbdb3781543c0edc9d0d884bab93eb8ebeeb3f85b0e196bf33e
 
-cc 1.4.6
+cc 1.10.0
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/cc/1.4.6
+Source: https://crates.io/crates/cc/1.10.0
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 84e1bbfebd74e4196cfa0ea5cf58e677aa24b47c6661adbb19fb07920d089d1d
 
@@ -216,9 +216,9 @@ Source: https://crates.io/crates/cpufeatures/0.3.1
   LICENSE-APACHE: e8541ea93f027a6c2cf077362f74492bdf0bb8354f63029962d84f1c130937a4
   LICENSE-MIT: ea753cf1e3ec3e02b9f8fdb7876d2a82e881209eb54fdb0df52997e3a14e40d7
 
-crc32fast 1.5.2
+crc32fast 1.5.3
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/crc32fast/1.5.2
+Source: https://crates.io/crates/crc32fast/1.5.3
   LICENSE-APACHE: 6dc0e068dcf3a5bc8e054205b85b7720e1d49265bbc64bf515d2cf79197df69a
   LICENSE-MIT: 9599127e421e16595d107a20935532cdb97ff570fbb0b06ed3aa67b04d0185a2
 
@@ -273,9 +273,9 @@ Source: https://crates.io/crates/deltae/0.3.2
   docs/doc/LICENSE-APACHE.txt: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   docs/doc/LICENSE-MIT.txt: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-deranged 0.5.8
+deranged 0.5.9
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/deranged/0.5.8
+Source: https://crates.io/crates/deranged/0.5.9
   LICENSE-Apache: b4839ecf405b5fa4a20f234ae6b686ab7f245e7eec8eb634174b833ea86a4653
   LICENSE-MIT: 1b66e3be6894b377a3b48201fbe33aab04c6a214f09309100a532b70ed497687
 
@@ -324,15 +324,15 @@ Declared license: CC0-1.0 OR MIT-0 OR Apache-2.0
 Source: https://crates.io/crates/dunce/1.0.5
   LICENSE: 6d489af6292662d9e36d34ce49423784984a5f6e41d7b58f49b01264df59fa03
 
-either 1.18.0
+either 1.19.0
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/either/1.18.0
+Source: https://crates.io/crates/either/1.19.0
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: fdd1c2117bcf8157d1d013d0953c0a7e6e5fab73df9e36773cd77634428568eb
 
-equivalent 1.0.2
+equivalent 1.0.3
 Declared license: Apache-2.0 OR MIT
-Source: https://crates.io/crates/equivalent/1.0.2
+Source: https://crates.io/crates/equivalent/1.0.3
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 4428cd87371acbd49f9f6380125492cd1e89df621d2fd7f55e30a0891f96a433
 
@@ -365,15 +365,15 @@ Declared license: MIT
 Source: https://crates.io/crates/filedescriptor/0.8.3
   LICENSE.md: 0f5e2ba844a4557af19c2277bf6c7d4a088606d1dde4abab72f29b65dbbbc8cb
 
-find-msvc-tools 0.1.12
+find-msvc-tools 0.1.15
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/find-msvc-tools/0.1.12
+Source: https://crates.io/crates/find-msvc-tools/0.1.15
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 84e1bbfebd74e4196cfa0ea5cf58e677aa24b47c6661adbb19fb07920d089d1d
 
-finl_unicode 1.4.0
+finl_unicode 1.5.0
 Declared license: (MIT OR Apache-2.0) AND Unicode-DFS-2016
-Source: https://crates.io/crates/finl_unicode/1.4.0
+Source: https://crates.io/crates/finl_unicode/1.5.0
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
   LICENSE-UNICODE: 361d7912957842f2ce61c774b14afba41ae91df84882982e6f7e749e01c07c91
@@ -464,12 +464,6 @@ Source: https://crates.io/crates/getrandom/0.4.3
   LICENSE-APACHE: e7330bf53074b4a9c5896f4a03d782be7f163381e45923d5e2369fe194a19f99
   LICENSE-MIT: 94b1870d380ccf537d5bdfda2de882965c9afb814acc375cb1b47fc1a0014ee3
 
-hashbrown 0.16.1
-Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/hashbrown/0.16.1
-  LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
-  LICENSE-MIT: ae9791f02f2bbe0ce17b434753af97be6e5284b6f8e9f22db3c1f0f11b2e015a
-
 hashbrown 0.17.1
 Declared license: MIT OR Apache-2.0
 Source: https://crates.io/crates/hashbrown/0.17.1
@@ -510,21 +504,21 @@ Source: https://crates.io/crates/httparse/1.10.1
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 8502803cebb30a728a7589325d3a9fa666d259013201558c1362d8900596a0de
 
-hyper 1.11.1
+hyper 1.12.0
 Declared license: MIT
-Source: https://crates.io/crates/hyper/1.11.1
+Source: https://crates.io/crates/hyper/1.12.0
   LICENSE: 05f344491a7d18e1a3188acbddf6f921284cb192e49d16391128d453000468ff
 
-hyper-rustls 0.27.9
+hyper-rustls 0.27.10
 Declared license: Apache-2.0 OR ISC OR MIT
-Source: https://crates.io/crates/hyper-rustls/0.27.9
+Source: https://crates.io/crates/hyper-rustls/0.27.10
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-ISC: af6da3f3f6b4929e02f81fd890835fd6d70ffddae12a8d735c0d7f294ac5ffd7
   LICENSE-MIT: a3320aa8d192a02cc2c9f31ebcceb861d71b737acdff1397d0d8a49361e86e73
 
-hyper-util 0.1.20
+hyper-util 0.1.21
 Declared license: MIT
-Source: https://crates.io/crates/hyper-util/0.1.20
+Source: https://crates.io/crates/hyper-util/0.1.21
   LICENSE: e7d622e4783e8c97aba7ddccb4469d7b495d550e95b9dc7b2e2d86fad6523bf6
 
 iana-time-zone 0.1.65
@@ -533,39 +527,39 @@ Source: https://crates.io/crates/iana-time-zone/0.1.65
   LICENSE-APACHE: 793420c92f3ce7d37390df60db0abc7eb8c7b990aeb1800bd010890c06411b70
   LICENSE-MIT: 3444712f3370b1c8e01c59c8fc887e4ebcdf5fa0276fc9af6146ab6068028c54
 
-icu_collections 2.3.0
+icu_collections 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_collections/2.3.0
+Source: https://crates.io/crates/icu_collections/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_locale_core 2.3.0
+icu_locale_core 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_locale_core/2.3.0
+Source: https://crates.io/crates/icu_locale_core/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_normalizer 2.3.0
+icu_normalizer 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_normalizer/2.3.0
+Source: https://crates.io/crates/icu_normalizer/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_normalizer_data 2.3.0
+icu_normalizer_data 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_normalizer_data/2.3.0
+Source: https://crates.io/crates/icu_normalizer_data/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_properties 2.3.0
+icu_properties 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_properties/2.3.0
+Source: https://crates.io/crates/icu_properties/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_properties_data 2.3.0
+icu_properties_data 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_properties_data/2.3.0
+Source: https://crates.io/crates/icu_properties_data/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-icu_provider 2.3.1
+icu_provider 2.4.0
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/icu_provider/2.3.1
+Source: https://crates.io/crates/icu_provider/2.4.0
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
 icy_sixel 0.5.1
@@ -604,15 +598,15 @@ Source: https://crates.io/crates/image-webp/0.2.4
   LICENSE-APACHE: 4bf96504d6e83ce5c6fc7167f1795d9ceaa68e70ab86bc5d08ab93184262bbbe
   LICENSE-MIT: 77949ead506e84e3ff5c31f784bdc17b6c4095d4102edae05dc5557ef6c61c8c
 
-indoc 2.0.7
+indoc 2.0.8
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/indoc/2.0.7
+Source: https://crates.io/crates/indoc/2.0.8
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-instability 0.3.13
+instability 0.3.14
 Declared license: MIT
-Source: https://crates.io/crates/instability/0.3.13
+Source: https://crates.io/crates/instability/0.3.14
   LICENSE.md: 901a50d6a47b06482bf3d294d90dc73e66b8892ff765bb3e30bc8280df03f386
 
 ipnet 2.12.2
@@ -639,9 +633,9 @@ Source: https://crates.io/crates/jobserver/0.1.35
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 84e1bbfebd74e4196cfa0ea5cf58e677aa24b47c6661adbb19fb07920d089d1d
 
-kasuari 0.4.12
+kasuari 0.4.13
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/kasuari/0.4.12
+Source: https://crates.io/crates/kasuari/0.4.13
   LICENSE-APACHE: e07c56fea52cb8d9ddd7a68916a9fe102e575c2ef8de7f3b09c4c52ce7492a76
   LICENSE-MIT: 5c45a95456ebc13374cd2ab5b7d4493723a2d2d390714664bb452dd98e6bb47d
 
@@ -650,15 +644,15 @@ Declared license: MIT
 Source: https://crates.io/crates/lab/0.11.0
   LICENSE: 20d6e72de1a221cf7e27bf20effb13080352c7d5c9f562ecf4394390436b965c
 
-lazy_static 1.5.0
+lazy_static 1.5.1
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/lazy_static/1.5.0
+Source: https://crates.io/crates/lazy_static/1.5.1
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
-  LICENSE-MIT: 9e0027807b0c548ac1df1bd85fe0d72da6665498b06ebf8a64d5cb841f39fcef
+  LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-libc 0.2.189
+libc 0.2.191
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/libc/0.2.189
+Source: https://crates.io/crates/libc/0.2.191
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: c96302294382bf166f3963bdbce0760aa2b9f0abaa2a7bdb296de7a1c7b51867
 
@@ -694,9 +688,9 @@ Declared license: Unicode-3.0
 Source: https://crates.io/crates/litemap/0.8.3
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-litrs 1.0.0
+litrs 1.0.1
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/litrs/1.0.0
+Source: https://crates.io/crates/litrs/1.0.1
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: da6604db16c0e6f84d6f59847f236910d450d25381d272f26d1d0e6315d7c0d2
 
@@ -712,9 +706,9 @@ Source: https://crates.io/crates/log/0.4.34
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 14435fbcd271e2783f721b57b7bf4f6502c1379249a4300e0e5bb774686c2d90
 
-lru 0.18.4
+lru 0.18.5
 Declared license: MIT
-Source: https://crates.io/crates/lru/0.18.4
+Source: https://crates.io/crates/lru/0.18.5
   LICENSE: 061dc50af2cd9340703daf61978af3200cf681b12ea67a323c33ba109a23a45e
 
 lru-slab 0.1.3
@@ -724,9 +718,9 @@ Source: https://crates.io/crates/lru-slab/0.1.3
   LICENSE-MIT: c9cf4d18fd9d2ab3fb30d39facfe8cff8ff8354950e2de5c864707e6c80a2764
   LICENSE-ZLIB: cebce11166dcba4336442c8d748df16c004b436c49b40b30721e59f221bae058
 
-mac_address 1.1.8
+mac_address 1.2.1
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/mac_address/1.1.8
+Source: https://crates.io/crates/mac_address/1.2.1
   LICENSE-APACHE2.0: e77d2f5330f39df2fb0d2a27c822a7ecad28d4bcdc1b4cf016b8d5c5ce523b26
   LICENSE-MIT: 16c5a3cc951992b74de5f73206aa0005300fbe610708b76a25ca65006aab76d3
 
@@ -770,9 +764,9 @@ Source: https://crates.io/crates/miniz_oxide/0.9.1
   LICENSE-MIT.md: ac9859ce4e9a80a4846ee0b453981427f4fc2ba9ac7d0e568de61ab80a53d86d
   LICENSE-ZLIB.md: eac3911cc3d41ffb7de705edeec755d3f83189b61839389cc9079acb54d8c5af
 
-mio 1.2.3
+mio 1.2.4
 Declared license: MIT
-Source: https://crates.io/crates/mio/1.2.3
+Source: https://crates.io/crates/mio/1.2.4
   LICENSE: c804065b0956d00a65ce119456ec48ee456f5446b904b07ee85225ba5a88ce41
 
 moxcms 0.8.1
@@ -784,6 +778,11 @@ Source: https://crates.io/crates/moxcms/0.8.1
 nix 0.29.0
 Declared license: MIT
 Source: https://crates.io/crates/nix/0.29.0
+  LICENSE: b9b039b5058cfe9680025ca12f8591df832666baef9f469ea8ba24e73a7fee60
+
+nix 0.31.3
+Declared license: MIT
+Source: https://crates.io/crates/nix/0.31.3
   LICENSE: b9b039b5058cfe9680025ca12f8591df832666baef9f469ea8ba24e73a7fee60
 
 nom 7.1.3
@@ -809,9 +808,9 @@ Source: https://crates.io/crates/num-traits/0.2.19
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 14435fbcd271e2783f721b57b7bf4f6502c1379249a4300e0e5bb774686c2d90
 
-num_threads 0.1.7
+num_threads 0.1.8
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/num_threads/0.1.7
+Source: https://crates.io/crates/num_threads/0.1.8
   LICENSE-Apache: bdcd4825d5221f2bfc4426e5ee4ae5ce5ed1e57c9a650c1b182128d3fb452d4b
   LICENSE-MIT: c2c01161ef13c73287afaecf023fd81f23cc76f50662ee03c3f7eacef1b3d0bc
 
@@ -961,9 +960,9 @@ Declared license: Unicode-3.0
 Source: https://crates.io/crates/potential_utf/0.1.6
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-powerfmt 0.2.0
+powerfmt 0.2.1
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/powerfmt/0.2.0
+Source: https://crates.io/crates/powerfmt/0.2.1
   LICENSE-Apache: 4b05c4b43039d82b9ef8f3fb6cbf97f8312485eb9e6546a8171b37b73e048b08
   LICENSE-MIT: 6e972f314e81b300c51ebacaddfea1799bbf661b6c65decc4db677ce49483c9e
 
@@ -1004,15 +1003,15 @@ Source: https://crates.io/crates/quinn/0.11.12
   LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
   LICENSE-MIT: 05fa1ba3228aab8d2bf637f286d7579ed76256c1dab3fa955c2489b920ffeb35
 
-quinn-proto 0.11.18
+quinn-proto 0.11.19
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/quinn-proto/0.11.18
+Source: https://crates.io/crates/quinn-proto/0.11.19
   LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
   LICENSE-MIT: 05fa1ba3228aab8d2bf637f286d7579ed76256c1dab3fa955c2489b920ffeb35
 
-quinn-udp 0.5.15
+quinn-udp 0.5.16
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/quinn-udp/0.5.15
+Source: https://crates.io/crates/quinn-udp/0.5.16
   LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
   LICENSE-MIT: 05fa1ba3228aab8d2bf637f286d7579ed76256c1dab3fa955c2489b920ffeb35
 
@@ -1027,9 +1026,9 @@ Declared license: MIT
 Source: https://crates.io/crates/radium/0.7.0
   LICENSE.txt: fa811b6d5b5d154bff9018882a06d1b0bcbe9c214c64b78aaaeaa59d98a3f3c3
 
-rand 0.10.2
+rand 0.10.3
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/rand/0.10.2
+Source: https://crates.io/crates/rand/0.10.3
   COPYRIGHT: 2411d70acb18e15ac32f7aace439a5c2725b8d0074510caf651d4c270d7c05aa
   LICENSE-APACHE: fee4d7ce394c9161daabd2797e22d8d5ed80ea3c0f4524b242ab22582d2cc412
   LICENSE-MIT: cc367a7134c2b07d995a2f8dea591094a1d100e49c68513f729fdf3eaf580a21
@@ -1192,16 +1191,16 @@ Source: https://crates.io/crates/rustix/1.1.5
   LICENSE-Apache-2.0_WITH_LLVM-exception: 2f213ec6b1355dc841dc489c9e7ce1dddd07611df474efcf61b8a960797398e9
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-rustls 0.23.45
+rustls 0.23.46
 Declared license: Apache-2.0 OR ISC OR MIT
-Source: https://crates.io/crates/rustls/0.23.45
+Source: https://crates.io/crates/rustls/0.23.46
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-ISC: af6da3f3f6b4929e02f81fd890835fd6d70ffddae12a8d735c0d7f294ac5ffd7
   LICENSE-MIT: a3320aa8d192a02cc2c9f31ebcceb861d71b737acdff1397d0d8a49361e86e73
 
-rustls-native-certs 0.8.4
+rustls-native-certs 0.8.5
 Declared license: Apache-2.0 OR ISC OR MIT
-Source: https://crates.io/crates/rustls-native-certs/0.8.4
+Source: https://crates.io/crates/rustls-native-certs/0.8.5
   LICENSE: 29fbc81a3f88db204872696133ac1d8c23ddc227513568013c298ba37b9a3a4f
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-ISC: af6da3f3f6b4929e02f81fd890835fd6d70ffddae12a8d735c0d7f294ac5ffd7
@@ -1213,15 +1212,15 @@ Source: https://crates.io/crates/rustls-pki-types/1.15.1
   LICENSE-APACHE: 430e912c26cec30cdf52f4367b6d15dd3f898d2a19db349a62a9f3095ca98a5b
   LICENSE-MIT: c5e7f780f961f850c7ac6e80e29b6aa3e5c3a503677eb7b7a9826fc6d735eb2e
 
-rustls-platform-verifier 0.7.0
+rustls-platform-verifier 0.7.1
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/rustls-platform-verifier/0.7.0
+Source: https://crates.io/crates/rustls-platform-verifier/0.7.1
   LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
   LICENSE-MIT: 6205904d553962d42fd62764787a5b635a1416d4b3794f4fc465ec36bfbf7ceb
 
-rustls-webpki 0.103.15
+rustls-webpki 0.103.16
 Declared license: ISC
-Source: https://crates.io/crates/rustls-webpki/0.103.15
+Source: https://crates.io/crates/rustls-webpki/0.103.16
   LICENSE: 3ac27594ed56fd079c95a71f8beabc498c5b997ec31e91f4a18e59a5974adb2a
 
 rustversion 1.0.23
@@ -1279,9 +1278,9 @@ Source: https://crates.io/crates/serde_derive/1.0.229
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-serde_json 1.0.151
+serde_json 1.0.154
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/serde_json/1.0.151
+Source: https://crates.io/crates/serde_json/1.0.154
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
@@ -1326,19 +1325,21 @@ Declared license: MIT
 Source: https://crates.io/crates/simd-adler32/0.3.10
   LICENSE.md: 627eff66d6c4b984355e737e8a92b262d584865956e93a1ece6e285a083d8be9
 
-siphasher 1.0.3
-Declared license: MIT/Apache-2.0
-Source: https://crates.io/crates/siphasher/1.0.3
+siphasher 1.0.4
+Declared license: MIT OR Apache-2.0
+Source: https://crates.io/crates/siphasher/1.0.4
   COPYING: 24e26e8fb783e2db1c502733a49f69865ea6cb6245bc13ae8429796a0f5e0a48
+  LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
+  LICENSE-MIT: 21a2121221d2a35df2d8d333d00a61ed240446b6107092741ff996941acdc919
 
 slab 0.4.12
 Declared license: MIT
 Source: https://crates.io/crates/slab/0.4.12
   LICENSE: 12c7116c4425c559c9d7aed5cafbc1d4039286f17619ee2e6dd25f59728e679e
 
-smallvec 1.16.1
+smallvec 1.16.4
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/smallvec/1.16.1
+Source: https://crates.io/crates/smallvec/1.16.4
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 7f194ae45c2525a57443f7edabd392e8218109ee81a4bce70d385104c87c1a71
 
@@ -1392,9 +1393,9 @@ Source: https://crates.io/crates/syn/2.0.119
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-syn 3.0.6
+syn 3.0.9
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/syn/3.0.6
+Source: https://crates.io/crates/syn/3.0.9
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
@@ -1440,9 +1441,9 @@ Source: https://crates.io/crates/thiserror/1.0.69
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-thiserror 2.0.20
+thiserror 2.0.21
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/thiserror/2.0.20
+Source: https://crates.io/crates/thiserror/2.0.21
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
@@ -1452,9 +1453,9 @@ Source: https://crates.io/crates/thiserror-impl/1.0.69
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
-thiserror-impl 2.0.20
+thiserror-impl 2.0.21
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/thiserror-impl/2.0.20
+Source: https://crates.io/crates/thiserror-impl/2.0.21
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
 
@@ -1470,9 +1471,9 @@ Source: https://crates.io/crates/time-core/0.1.9
   LICENSE-Apache: 4bf96504d6e83ce5c6fc7167f1795d9ceaa68e70ab86bc5d08ab93184262bbbe
   LICENSE-MIT: 7fdbca77dec6709aaa7ce778f43f3e8c5c860302c029f989dddc141bb036c87a
 
-tinystr 0.8.4
+tinystr 0.8.5
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/tinystr/0.8.4
+Source: https://crates.io/crates/tinystr/0.8.5
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
 tinyvec 1.13.3
@@ -1482,9 +1483,9 @@ Source: https://crates.io/crates/tinyvec/1.13.3
   LICENSE-MIT.md: bccaa8b6c09f94e81f06696e179dbe058464bbdfbc823b6d49cada1d71e84ac3
   LICENSE-ZLIB.md: 943f36fd309fb5ea67a82f577433f4ed3bc877e5b00f9b874e2f8b7f72bf0bdc
 
-tokio 1.53.1
+tokio 1.54.1
 Declared license: MIT
-Source: https://crates.io/crates/tokio/1.53.1
+Source: https://crates.io/crates/tokio/1.54.1
   LICENSE: 3e1bef82aa0dfee4504ad211f7e4895153e3191db6ab179f94a7e20f990a0b67
 
 tokio-macros 2.7.2
@@ -1492,9 +1493,9 @@ Declared license: MIT
 Source: https://crates.io/crates/tokio-macros/2.7.2
   LICENSE: c0fdcda1a4ffc5fd63c452e40ce25e54f2098669e3415033b228773eea24a871
 
-tokio-rustls 0.26.5
+tokio-rustls 0.26.6
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/tokio-rustls/0.26.5
+Source: https://crates.io/crates/tokio-rustls/0.26.6
   LICENSE-APACHE: acddfb05f07ab0048f60a6080856befa9a37cd2f2e4aaef35bd3fe5cba145b62
   LICENSE-MIT: 1b0258c48739a24ea7c8e4e45fd32862666ea416630cdae24179b2d64ef742e3
 
@@ -1547,9 +1548,9 @@ Source: https://crates.io/crates/ucd-trie/0.1.7
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 154c1af2b38e25e5c18613dfe352eed29b0863cb39e494007822cdeb39150ac5
 
-unicode-ident 1.0.25
+unicode-ident 1.0.27
 Declared license: (MIT OR Apache-2.0) AND Unicode-3.0
-Source: https://crates.io/crates/unicode-ident/1.0.25
+Source: https://crates.io/crates/unicode-ident/1.0.27
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: 30fefc3a7d6a0041541858293bcbea2dde4caa4c0a5802f996a7f7e8c0085652
   LICENSE-UNICODE: 361d7912957842f2ce61c774b14afba41ae91df84882982e6f7e749e01c07c91
@@ -1599,9 +1600,9 @@ Source: https://crates.io/crates/utf8parse/0.2.2
   LICENSE-APACHE: 85ad950cce8752f716dbf49be95b2639172cb49f291336d57f1fdc9989e38179
   LICENSE-MIT: db2c904eb5685e69d3ea20f1f8187c8ed82b44077221fd99c4a68234739de941
 
-uuid 1.26.1
+uuid 1.29.0
 Declared license: Apache-2.0 OR MIT
-Source: https://crates.io/crates/uuid/1.26.1
+Source: https://crates.io/crates/uuid/1.29.0
   LICENSE-APACHE: 954f335b8baf5e1a5748b3a1bf6eeb2ec0b28ae19813f02063d64be005765a76
   LICENSE-MIT: 11cd7e6caed4b2377bdc3a08deb5a565efb76f0d747cfb2e26c7f7c1f6302e54
 
@@ -1623,9 +1624,9 @@ Source: https://crates.io/crates/vtparse/0.6.2
 Supplemental license sources: https://raw.githubusercontent.com/wezterm/wezterm/edeae72b5fc55c7fa4aa1d08bbefd08c5493f757/LICENSE.md
   LICENSE.md: 077052304c74e8f10ebf2300bf1373183f19b11c04f94d8a48af85a0c0a4f439
 
-want 0.3.1
+want 0.3.2
 Declared license: MIT
-Source: https://crates.io/crates/want/0.3.1
+Source: https://crates.io/crates/want/0.3.2
   LICENSE: f7dfffe03f9faba8e83911d59bbf459371a0fe8d18f6c84f71d5386030fba26c
 
 wezterm-bidi 0.2.3
@@ -1714,9 +1715,9 @@ Source: https://crates.io/crates/windows-strings/0.1.0
   license-apache-2.0: 783829b43aacb86cb8e6cedcd777210c13f2081aae94419cc7a30e112977d488
   license-mit: ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310
 
-windows-sys 0.52.0
+windows-sys 0.59.0
 Declared license: MIT OR Apache-2.0
-Source: https://crates.io/crates/windows-sys/0.52.0
+Source: https://crates.io/crates/windows-sys/0.59.0
   license-apache-2.0: 783829b43aacb86cb8e6cedcd777210c13f2081aae94419cc7a30e112977d488
   license-mit: ff82c90f84945c60601e96b43246009b9bc589f3ebe1cd8a0fd39a3520d8c310
 
@@ -1748,19 +1749,19 @@ Declared license: MIT
 Source: https://crates.io/crates/wyz/0.5.1
   LICENSE.txt: 667fdb63d9abc6e572b47947a9b2ed3d73f317b1a7ee36def6c52b4b83b6b166
 
-yoke 0.8.3
+yoke 0.8.4
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/yoke/0.8.3
+Source: https://crates.io/crates/yoke/0.8.4
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-yoke-derive 0.8.3
+yoke-derive 0.8.4
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/yoke-derive/0.8.3
+Source: https://crates.io/crates/yoke-derive/0.8.4
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-zerocopy 0.8.57
+zerocopy 0.8.63
 Declared license: BSD-2-Clause OR Apache-2.0 OR MIT
-Source: https://crates.io/crates/zerocopy/0.8.57
+Source: https://crates.io/crates/zerocopy/0.8.63
   LICENSE-APACHE: 98ed0ad9db8a72957b9c45941fe2ed31933a3beacbd193e662df483d0643a13d
   LICENSE-BSD: 47248d1ec833e0771ddacb65f2cf9978785f4a9976b5b0b69d1e33c60a50be55
   LICENSE-MIT: a03d4daa4f46496a592dbf6734f5ee16ed52f1eb7a56ae4648d609ebf0efd0b7
@@ -1775,9 +1776,9 @@ Declared license: Unicode-3.0
 Source: https://crates.io/crates/zerofrom-derive/0.1.8
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-zeroize 1.9.0
+zeroize 1.9.1
 Declared license: Apache-2.0 OR MIT
-Source: https://crates.io/crates/zeroize/1.9.0
+Source: https://crates.io/crates/zeroize/1.9.1
   LICENSE-APACHE: 283ea6cc2997a1a70da0049e09adf9317bb60ca1b51279b65196b83a69e1996b
   LICENSE-MIT: 836ed921bbad486c21fe437f1f565aef73cf20f242f7344eae04b01ed53a2d57
 
@@ -1786,14 +1787,14 @@ Declared license: Unicode-3.0
 Source: https://crates.io/crates/zerotrie/0.2.5
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-zerovec 0.11.8
+zerovec 0.11.9
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/zerovec/0.11.8
+Source: https://crates.io/crates/zerovec/0.11.9
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
-zerovec-derive 0.11.6
+zerovec-derive 0.11.7
 Declared license: Unicode-3.0
-Source: https://crates.io/crates/zerovec-derive/0.11.6
+Source: https://crates.io/crates/zerovec-derive/0.11.7
   LICENSE: cde87abe221f413fede55ded0f17985f37b8fdc23e5f6cba9a3955437facb3ae
 
 zlib-rs 0.6.8
@@ -3759,6 +3760,25 @@ Apache License
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+=== 21a2121221d2a35df2d8d333d00a61ed240446b6107092741ff996941acdc919 ===
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 === 22e649f12b51ec803d2b002a07d8af58836604243528720e0ad5988df32f6c45 ===
 DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
@@ -11932,33 +11952,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-=== 9e0027807b0c548ac1df1bd85fe0d72da6665498b06ebf8a64d5cb841f39fcef ===
-Copyright (c) 2010 The Rust Project Developers
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
 
 === a00511478c83ebb464ef19d840f061c7444adc4636bb561900e75c5808cfc6cc ===
 MIT License
