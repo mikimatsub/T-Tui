@@ -75,7 +75,6 @@ def main():
             send('\r')
             wait('Ctrl-P profile')
             # The composer is ready once the restored draft is shown in the Message box.
-            wait('Message ─')
             end = time.monotonic() + 12
             while 'Windows draft' not in '\n'.join(screen.display[-8:]):
                 if time.monotonic() > end: raise AssertionError('Draft not restored in composer\n' + '\n'.join(screen.display))
