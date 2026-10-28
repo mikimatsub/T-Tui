@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Release workflow now passes the npm tarball as a local path (`./dist/*.tgz`) so `npm publish` no longer treats it as a GitHub shorthand.
+
 ## 1.0.0 (2026-10-27)
 
 First stable release. The maintainer verified the real-account workflows listed in [docs/VERIFICATION.md](docs/VERIFICATION.md).

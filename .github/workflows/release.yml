@@ -128,4 +128,4 @@ jobs:
         run: |
           channel=latest
           if [[ "$RELEASE_TAG" == *-* ]]; then channel=next; fi
-          npm publish dist/*.tgz --provenance --access public --tag "$channel" --ignore-scripts
+          npm publish ./dist/*.tgz --provenance --access public --tag "$channel" --ignore-scripts
