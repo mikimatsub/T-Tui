@@ -10,7 +10,7 @@
 
 ### Changed
 
-- README demo tour and screenshots recaptured in a graphics-capable terminal, so photos render as real pixels instead of text-cell blocks; the tour is now an animated WebP (`docs/assets/demo.webp`) to keep gradients smooth.
+- README demo tour and screenshots recaptured in a graphics-capable terminal, so photos render as real pixels instead of text-cell blocks; the tour is now an animated WebP (`docs/assets/tour.webp`) to keep gradients smooth.
 
 ### Fixed
 
