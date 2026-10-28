@@ -12,7 +12,7 @@ Registry/release evidence checked 2026-10-05. These are selected pins, not promi
 | Gitleaks binary | 8.30.1 | 2026-03-21 | [upstream release](https://github.com/gitleaks/gitleaks/releases/tag/v8.30.1) |
 | crossterm (local patch) | 0.29.0 | 2025-04-05 | [crates.io](https://crates.io/api/v1/crates/crossterm), [patch provenance](../vendor/crossterm/LOCAL_PATCH.md) |
 | pyte | 0.8.2 | 2023-11-12 | [PyPI](https://pypi.org/pypi/pyte/json) |
-| Pillow | 12.3.0 | 2026-07-01 | [PyPI](https://pypi.org/pypi/pillow/json) |
+| Pillow | 13.0.0 | 2026-10-16 | [PyPI](https://pypi.org/pypi/pillow/json) |
 | pywinpty | 3.0.5 | 2026-06-10 | [PyPI](https://pypi.org/pypi/pywinpty/json) |
 | wcwidth | 0.9.1 | 2026-09-23 | [PyPI release](https://pypi.org/pypi/wcwidth/0.9.1/json) |
 
