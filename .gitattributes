@@ -2,3 +2,6 @@
 *.png binary
 *.jpg binary
 *.exe binary
+
+# Generated license bundle; keep it out of GitHub language stats
+RUST-STDLIB-LICENSE.html linguist-generated=true linguist-vendored=true
