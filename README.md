@@ -1,49 +1,103 @@
-# T-TUI
+<div align="center">
 
-[![CI](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml)
-[![Security](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml)
-[![npm version](https://img.shields.io/npm/v/@mikimatsub/ttui.svg)](https://www.npmjs.com/package/@mikimatsub/ttui)
-[![GitHub release](https://img.shields.io/github/v/release/mikimatsub/T-Tui?include_prereleases)](https://github.com/mikimatsub/T-Tui/releases)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+<img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/banner.svg" alt="T-TUI: Tinder, in your terminal. Discover, chat, profiles and themes on Linux and Windows." width="100%">
 
-**Terminal client for Tinder.** Discover people, browse profiles, keep up with conversations, and edit your bio and discovery preferences with the keyboard or the mouse.
+<h3>A fast, keyboard-first Tinder client for Linux and Windows terminals.</h3>
 
-The session lives only on this machine. Tokens are masked and saved atomically: Unix uses owner-readable (`0600`) files; Windows protects credentials with current-user DPAPI. Drafts and settings remain readable JSON. T-TUI parses a pasted cURL command for headers and does not execute it. It does not bypass verification, buy credits, or submit reports.
+[![CI](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml) [![Security](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml) [![npm version](https://img.shields.io/npm/v/@mikimatsub/ttui.svg)](https://www.npmjs.com/package/@mikimatsub/ttui) [![GitHub release](https://img.shields.io/github/v/release/mikimatsub/T-Tui?include_prereleases)](https://github.com/mikimatsub/T-Tui/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mikimatsub/T-Tui/blob/main/LICENSE) ![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows-8a63d2) ![Built with Rust](https://img.shields.io/badge/built%20with-Rust-dea584)
 
-Tinder can change these endpoints or send you back to the website to finish verification. Request shapes were cross-checked on 2026-09-18 against the [tinder-api client](https://github.com/Miguelo981/tinder-api/blob/main/src/tinder.ts). Local contract tests are not a substitute for checking a signed-in account. The supported surface and the remaining website-only workflows are in [FEATURES.md](FEATURES.md).
+[**Install**](#-install) · [**Features**](#-features) · [**Screenshots**](#-screenshots) · [**Keys**](#%EF%B8%8F-keyboard-shortcuts) · [**FAQ**](#-faq) · [**Releases**](https://github.com/mikimatsub/T-Tui/releases)
 
----
+<img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/demo.gif" alt="Animated tour of the offline demo: inbox, profile, discovery, chat, theme picker, account editor and light theme, all with fictional profiles" width="860">
 
-## Preparing 1.0
+<sub>Recorded from <code>ttui --mock</code>. Every profile and photo is fictional.</sub>
 
-The current source is **1.0.0-rc.2**. Linux and native Windows are equal priorities. A stable release is not yet published. [CHANGELOG.md](CHANGELOG.md) records changes, [PLAN.md](PLAN.md) tracks execution, and [docs/RELEASING.md](docs/RELEASING.md) defines release gates.
-
-The [GitHub release candidate](https://github.com/mikimatsub/T-Tui/releases/tag/v1.0.0-rc.2) provides standalone x86-64 binaries and checksums. The same binaries are available through [@mikimatsub/ttui on npm](https://www.npmjs.com/package/@mikimatsub/ttui). Public-download and npm-registry installation checks passed on Linux and Windows. WinGet is planned after a public stable release and Microsoft review. ARM and macOS are outside the 1.0 support promise.
-
-The release candidate is intended for acceptance testing. Automated checks use fictional accounts; live login, synchronization and mutations still need validation before stable 1.0.
+</div>
 
 ---
 
-## Quick start
+## ✨ Features
 
-You need:
+<table>
+<tr>
+<td width="50%" valign="top">
 
-- A matching standalone binary from GitHub Releases, or Rust and Cargo to build from source
-- An interactive terminal. The layout works from 50 × 16 cells. 100 × 30 or larger shows the full split view
-- For sharp photos, a terminal with native graphics, such as Foot (Sixel), Kitty, iTerm2, or Windows Terminal 1.22 and later (Sixel). Other terminals use a truecolor text fallback
+### 🔥 Discover
+Swipe with `y` and `n`, page through photos with the arrows, read the full profile, and use Super Like or Boost with a confirmation first.
 
-### Install
+</td>
+<td width="50%" valign="top">
 
-For a standalone candidate, download the archive for your system and its `.sha256` file from [GitHub Releases](https://github.com/mikimatsub/T-Tui/releases). Compare its SHA-256 before extracting. Linux archives contain `ttui`; Windows archives contain `ttui.exe`. Run the executable directly or put its directory on your PATH. These downloads do not require Node or Rust.
+### 💬 Chat
+Inbox with search, filters, sorting, pins and read markers. Drafts save automatically, older history loads on demand, and failed sends can be restored for review.
 
-With a Node runtime satisfying the [package's engine requirement](npm/package.json), install the candidate from npm:
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### 🖼️ Real photos in the terminal
+Sixel, Kitty and iTerm2 graphics with sharp resampling, including Windows Terminal 1.22 and later. Other terminals get a truecolor text fallback.
+
+</td>
+<td valign="top">
+
+### 🎨 24 themes
+T-TUI Dark and Light plus adaptations of Dracula, Catppuccin, Nord, Gruvbox, Tokyo Night, One, Solarized, Rose Pine, Monokai, Material and GitHub. Preview live with `F2`.
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### ✍️ Your profile
+Edit your bio, age range, distance, gender preference and discovery visibility. Only the fields you change are sent, and only after **Save**.
+
+</td>
+<td valign="top">
+
+### 🔒 Private by design
+The session stays on your machine: `0600` files on Linux, current-user DPAPI on Windows. Tokens are masked. No telemetry, no bypassing verification, no buying credits.
+
+</td>
+</tr>
+<tr>
+<td valign="top">
+
+### 🖱️ Keyboard and mouse
+Every action has a key, and every bracketed button is clickable. The wheel scrolls whatever is under the pointer.
+
+</td>
+<td valign="top">
+
+### 🧪 Offline demo
+`ttui --mock` opens a full demo with fictional profiles. Every Like becomes a match so you can try the whole flow without an account.
+
+</td>
+</tr>
+</table>
+
+---
+
+## 📦 Install
+
+### npm (Linux and Windows, x86-64)
 
 ```sh
-npm install --global @mikimatsub/ttui@next
+npm install --global @mikimatsub/ttui
 ttui --mock
 ```
 
-This package contains both native binaries and has no dependencies, install scripts or runtime binary download. Use the explicit `next` channel above for candidate testing. npm currently also resolves `latest` to this prerelease; a stable version is not available. See the [verification record](docs/VERIFICATION.md).
+The package bundles both native binaries. It has no dependencies, no install scripts and no runtime download. Requires Node >=24.21.0.
+
+### Standalone binary (no Node or Rust needed)
+
+1. Download the archive for your system and its `.sha256` file from [**GitHub Releases**](https://github.com/mikimatsub/T-Tui/releases).
+2. Compare the SHA-256, then extract. Linux archives contain `ttui`; Windows archives contain `ttui.exe`.
+3. Run it directly or put its folder on your `PATH`.
+
+<details>
+<summary><b>Build from source</b></summary>
 
 To build and install from this repository on Linux:
 
@@ -55,39 +109,30 @@ On Windows, run `./scripts/install.ps1` in PowerShell with Rust and the MSVC C++
 
 The installer builds a release binary and copies it to `~/.local/bin/ttui`. Set `TTUI_INSTALL_DIR` to use another directory. That directory must be on your `PATH`. The install needs no administrator privileges and no system package. Your saved account and settings stay in the config directory, so the installed command keeps working if you move or remove this repository. Rerun the installer after source updates.
 
-### Run
+</details>
+
+### Requirements
+
+| | |
+|---|---|
+| **OS** | Linux x86-64 or Windows x86-64 |
+| **Terminal size** | Works from 50 × 16; 100 × 30 or larger shows the full split view |
+| **Sharp photos** | A terminal with native graphics: **Windows Terminal 1.22+**, Foot (Sixel), Kitty or iTerm2. Others use a text fallback |
+
+---
+
+## 🚀 Quick start
 
 ```sh
-ttui             # your account
-ttui --mock      # offline demo with fictional profiles
+ttui --mock      # try the offline demo first
+ttui             # open your account
+ttui --check     # read-only health check of a saved session
 ```
 
-To run from a checkout instead of the installed command:
+Press `F1` for help and `Ctrl-Q` to quit. A healthy `--check` ends with `Read-only checks complete; no messages or swipes sent.`
 
-```sh
-./ttui           # your account
-./ttui --mock    # offline demo
-```
-
-`./ttui` builds an optimized binary the first time you launch it.
-
-### Verify it works
-
-Offline, with no account and no network:
-
-```sh
-ttui --mock
-```
-
-The inbox opens with fictional profiles. Press `F1` for keys. Press `Ctrl-Q` to quit. In the demo, every Like becomes a match so you can walk the whole flow.
-
-After a real session is saved, this check is read-only. It sends no messages and no swipes:
-
-```sh
-ttui --check
-```
-
-A healthy session prints `Account connection: OK`, then inbox, history, profile, discovery, sync, and photo lines, and ends with `Read-only checks complete; no messages or swipes sent.`
+<details>
+<summary><b>All commands</b></summary>
 
 | Command | What it does |
 |---|---|
@@ -102,9 +147,14 @@ A healthy session prints `Account connection: OK`, then inbox, history, profile,
 | `ttui --clear-cache` | Remove managed cached photos; run with T-TUI closed. |
 | `ttui --help`, `ttui -h` | Print usage and the config path. |
 
----
+</details>
 
-## Connect your account
+### Connect your account
+
+Sign in on [Tinder Web](https://tinder.com), then press **Ctrl-B** on the connection screen for browser login (experimental), or paste a copied request into the **Auth token** field.
+
+<details>
+<summary><b>Step-by-step connection guide</b></summary>
 
 ### Browser login
 
@@ -135,9 +185,45 @@ wl-paste --no-newline | ttui --import-session
 ttui --check
 ```
 
+</details>
+
 ---
 
-## Everyday keys
+## 📸 Screenshots
+
+<table>
+<tr>
+<td><img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/inbox.png" alt="Inbox with conversation list, message previews and a profile preview" width="100%"></td>
+<td><img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/discover.png" alt="Discovery card with photo carousel and profile prompts" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><sub>Inbox</sub></td>
+<td align="center"><sub>Discover</sub></td>
+</tr>
+<tr>
+<td><img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/chat.png" alt="Chat conversation with sent and received messages" width="100%"></td>
+<td><img src="https://raw.githubusercontent.com/mikimatsub/T-Tui/main/docs/assets/themes-catppuccin.png" alt="Theme picker previewing Catppuccin" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><sub>Chat</sub></td>
+<td align="center"><sub>Themes</sub></td>
+</tr>
+</table>
+
+---
+
+## ⌨️ Keyboard shortcuts
+
+| Where | Keys |
+|---|---|
+| Everywhere | `F1` help · `F2` themes · `Ctrl-O` account · `Ctrl-Q` quit |
+| Inbox | `↑↓`/`j k` select · `Enter` chat · `→` profile · `/` search · `d` discover |
+| Discover | `y` like · `n` pass · `←→` photos · `u` Super Like · `b` Boost |
+| Chat (Linux) | `Enter` send · `Alt-Enter` newline · `Esc` save draft |
+| Chat (Windows) | `Ctrl-S` send · `Enter` newline |
+
+<details>
+<summary><b>Full key reference</b></summary>
 
 | Where | Keys |
 |---|---|
@@ -162,7 +248,10 @@ Like and Pass run only from their buttons or from `y` and `n`. The arrow keys ch
 
 Drafts save after 750 ms without changes, when you leave a conversation, or when you quit. Newlines in a bracketed paste stay in the draft and do not send. A message is first pending, then unconfirmed. If a send times out, delivery is uncertain: read the conversation before you send it again. Restoring a failed message puts the text back for review and does not send it.
 
-## Mouse, photos, and themes
+</details>
+
+<details>
+<summary><b>Mouse, photos, themes and inbox tools</b></summary>
 
 Click the top tabs, a conversation row, or any bracketed action. Click either half of a profile photo to move backward or forward. The wheel scrolls the pane under the pointer: inbox, history, profile details, settings, account fields, help, or themes. Click or drag in the composer to place the cursor. Unicode characters stay intact. A dialog captures clicks so they cannot reach the screen under it. Mouse capture is restored on exit. Hold **Shift** for the terminal's own text selection where the terminal supports it.
 
@@ -174,9 +263,10 @@ Included palettes: T-TUI Dark (the default), T-TUI Light, Dracula, Catppuccin Mo
 
 Inbox tools are All, Unread, New, Drafts, and Pinned filters, Recent, Name, and Newest sorting, search across names and message previews, persistent pins, and local read markers. Pinned conversations sort first. Filters and search apply only to loaded conversations. **More** or uppercase **L** expands the session limit by 100, up to 1,000. It refetches the expanded inbox through existing server pagination. Pins and read markers stay on this device.
 
----
+</details>
 
-## Configuration
+<details>
+<summary><b>⚙️ Configuration and data locations</b></summary>
 
 | Name | Default | Notes |
 |---|---|---|
@@ -202,9 +292,53 @@ Unmatch asks for confirmation. Local conversation state is removed after the ser
 
 Sign out, after confirmation, removes the saved credentials, drafts, and read markers from this machine. Your Tinder account and the conversations on the server stay. The photo cache stays on disk, capped at 256 MiB and seven days; close T-TUI and use `--clear-cache` to remove it.
 
+</details>
+
 ---
 
-## Build and verify
+## ❓ FAQ
+
+<details>
+<summary><b>Photos look blocky.</b></summary>
+
+Your terminal has no native graphics, so T-TUI uses the text fallback. Use Windows Terminal 1.22 or later, Foot, Kitty or iTerm2. **Settings → In-terminal photos** shows which renderer was detected.
+
+</details>
+
+<details>
+<summary><b>I'm sent back to the connection screen.</b></summary>
+
+The session expired and there was no refresh token. Copy a fresh request from Tinder Web and paste it again, then run `ttui --check`.
+
+</details>
+
+<details>
+<summary><b>Browser login can't find my account.</b></summary>
+
+Browser login is experimental. If several Chromium profiles exist, set `TTUI_BROWSER_PROFILE` to the right profile directory, or use the manual connection steps.
+
+</details>
+
+<details>
+<summary><b>Does it work on macOS or ARM?</b></summary>
+
+Not yet. Linux x86-64 and Windows x86-64 are the supported targets.
+
+</details>
+
+<details>
+<summary><b>Something is off. How do I check?</b></summary>
+
+`ttui --doctor` prints local diagnostics without reading account data or contacting Tinder. Please [open an issue](https://github.com/mikimatsub/T-Tui/issues/new/choose) without tokens, copied requests, photos or message content.
+
+</details>
+
+---
+
+## 🛠️ Development
+
+<details>
+<summary><b>Build and verify</b></summary>
 
 Day-to-day use stops at [Quick start](#quick-start). This section is for changing the source.
 
@@ -221,25 +355,27 @@ Unit and HTTP contract tests cover session recovery, stale responses, message ac
 
 After editing source, run `./scripts/install.sh` to refresh the installed command. For the project launcher only, `cargo build --release --locked` is enough. `./ttui` uses the release binary when it is already built.
 
----
+</details>
 
-## Documentation
-
-- [`FEATURES.md`](./FEATURES.md): implemented workflows, website-only gaps, how the tests are bounded, and the API sources used on 2026-09-18
-- [`SECURITY.md`](./SECURITY.md): local storage and private vulnerability reporting
-- [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md): community expectations and private reporting
-- [`CONTRIBUTING.md`](./CONTRIBUTING.md): toolchain, checks to run, and commit conventions
-- [`CHANGELOG.md`](./CHANGELOG.md): version history
-- [`PROGRESS.md`](./PROGRESS.md): what landed in 0.3.0 and the checks that were run
-- [`docs/RELEASING.md`](./docs/RELEASING.md): release gates
-- [`docs/VERIFICATION.md`](./docs/VERIFICATION.md): publication and install verification record
+See [`CONTRIBUTING.md`](https://github.com/mikimatsub/T-Tui/blob/main/CONTRIBUTING.md) before opening a pull request.
 
 ---
+
+## 📚 Documentation
+
+- [`FEATURES.md`](https://github.com/mikimatsub/T-Tui/blob/main/FEATURES.md): supported workflows and what stays on Tinder Web
+- [`SECURITY.md`](https://github.com/mikimatsub/T-Tui/blob/main/SECURITY.md): local storage and private vulnerability reporting
+- [`CONTRIBUTING.md`](https://github.com/mikimatsub/T-Tui/blob/main/CONTRIBUTING.md): toolchain, checks and commit conventions
+- [`CODE_OF_CONDUCT.md`](https://github.com/mikimatsub/T-Tui/blob/main/CODE_OF_CONDUCT.md): community expectations
+- [`CHANGELOG.md`](https://github.com/mikimatsub/T-Tui/blob/main/CHANGELOG.md): version history
+- [`docs/RELEASING.md`](https://github.com/mikimatsub/T-Tui/blob/main/docs/RELEASING.md) and [`docs/VERIFICATION.md`](https://github.com/mikimatsub/T-Tui/blob/main/docs/VERIFICATION.md): release gates and verification record
+
+---
+
+## ⚠️ Disclaimer
+
+T-TUI is an **unofficial** client. It is not affiliated with, endorsed by, or sponsored by Tinder or Match Group, LLC. Tinder is a trademark of Match Group, LLC. Tinder can change its private API at any time or ask you to finish verification on the website. Use it at your own risk and within Tinder's terms.
 
 ## License
 
-MIT: see [LICENSE](./LICENSE). Provided "as is" without warranty.
-
-## Trademarks
-
-Tinder is a trademark of Match Group, LLC. This project is not affiliated with, endorsed by, or sponsored by Tinder or Match Group.
+MIT: see [LICENSE](https://github.com/mikimatsub/T-Tui/blob/main/LICENSE). Provided "as is" without warranty.

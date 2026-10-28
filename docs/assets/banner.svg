@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400" role="img" aria-labelledby="t d">
+  <title id="t">T-TUI</title>
+  <desc id="d">T-TUI: a keyboard-first terminal client for Tinder on Linux and Windows</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#101218"/><stop offset="1" stop-color="#1d1426"/>
+    </linearGradient>
+    <linearGradient id="acc" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff7c89"/><stop offset="1" stop-color="#bd93f9"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.82" cy="0.3" r="0.6">
+      <stop offset="0" stop-color="#bd93f9" stop-opacity="0.35"/><stop offset="1" stop-color="#bd93f9" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="400" rx="24" fill="url(#bg)"/>
+  <rect width="1280" height="400" rx="24" fill="url(#glow)"/>
+  <g transform="translate(110 110)">
+    <rect width="180" height="180" rx="36" fill="#171a22" stroke="url(#acc)" stroke-width="4"/>
+    <text x="28" y="78" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="44" font-weight="700" fill="#ff7c89">&gt;_</text>
+    <path d="M90 150 C 60 128 48 112 48 98 a 20 20 0 0 1 42 -6 a 20 20 0 0 1 42 6 c 0 14 -12 30 -42 52 z" fill="url(#acc)" transform="translate(52 -4) scale(0.8)"/>
+  </g>
+  <text x="350" y="205" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="96" font-weight="700" fill="url(#acc)">T-TUI</text>
+  <text x="354" y="262" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="30" fill="#e9e7e5">Tinder, in your terminal.</text>
+  <text x="354" y="306" font-family="-apple-system,Segoe UI,Helvetica,Arial,sans-serif" font-size="22" fill="#969ba8">Discover · Chat · Profiles · Themes   —   Linux &amp; Windows</text>
+</svg>
