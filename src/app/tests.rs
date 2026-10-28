@@ -1153,3 +1153,23 @@ async fn login_screen_has_browser_login_button() {
         "Missing BrowserLogin button on Login screen"
     );
 }
+
+#[tokio::test]
+async fn sending_persists_cleared_draft_immediately() {
+    let (mut app, mut rx) = fixture().await;
+    chat(&mut app, &mut rx).await;
+    let id = app.chat_match_id.clone().unwrap();
+    let path = app.config.storage_path.clone().unwrap();
+    app.config.save().unwrap();
+    app.handle_paste("Send me 日本語");
+    app.tick();
+    app.draft_changed = Some(Instant::now() - Duration::from_secs(1));
+    app.tick();
+    let read_saved =
+        || -> Config { serde_json::from_slice(&std::fs::read(&path).unwrap()).unwrap() };
+    assert_eq!(read_saved().drafts[&id], "Send me 日本語");
+    // Ctrl-S and the Send button both call send().
+    app.send();
+    assert!(app.input.is_empty());
+    assert!(!read_saved().drafts.get(&id).is_some_and(|d| !d.is_empty()));
+}
