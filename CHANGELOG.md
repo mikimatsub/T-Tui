@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 1.1.0 (2026-11-05)
+
+### Changed
+
+- npm package renamed from `@mikimatsub/ttui` to `ttui`. Install with `npm install -g ttui`.
+- CI now tests Node 24 and Node 26. Package engines remain `>=24.21.0`.
+
 ### Docs
 
 - README tour and screenshots now show AI-generated faces of people who do not exist instead of gradient placeholders. The faces live in `docs/demo-faces` (provenance documented) and are loaded only when `TTUI_DEMO_PHOTOS` is set, so the shipped package does not grow.

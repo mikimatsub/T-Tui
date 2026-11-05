@@ -1,11 +1,11 @@
 # Verified toolchain
 
-Registry/release evidence checked 2026-10-27. These are selected pins, not promises to remain the latest. Renovate inherits the maintainer's policy. Existing Cargo dependencies are resolved by the committed lockfile; the only new runtime dependency is Windows system bindings.
+Registry/release evidence checked 2026-10-27; Node release and support evidence rechecked 2026-11-05. These are selected pins, not promises to remain the latest. Renovate inherits the maintainer's policy. Existing Cargo dependencies are resolved by the committed lockfile; the only new runtime dependency is Windows system bindings.
 
 | Tool/package | Selected version | Published | Authoritative source |
 | --- | --- | --- | --- |
 | Rust | 1.99.1 | 2026-10-15 | [stable manifest](https://static.rust-lang.org/dist/channel-rust-stable.toml) |
-| Node LTS | 24.22.1 (CI; package minimum stays 24.21.0) | 2026-10-20 | [release index](https://nodejs.org/dist/index.json), [support schedule](https://github.com/nodejs/Release/blob/main/schedule.json) |
+| Node LTS | CI tests `24` and `26` (verified releases: 24.22.2 and 26.13.0); native/package/release jobs use `24`; package minimum stays 24.21.0 | 24.22.2: 2026-10-27; 26.13.0: 2026-10-28 | [release index](https://nodejs.org/dist/index.json), [support schedule](https://github.com/nodejs/Release/blob/main/schedule.json) |
 | Python | 3.14.8 | 2026-09-30 | [release/support index](https://endoflife.date/api/python.json) |
 | windows-sys | 0.61.2 | 2025-10-06 | [crates.io](https://crates.io/api/v1/crates/windows-sys) |
 | cargo-llvm-cov | 0.9.1 | 2026-09-06 | [crates.io](https://crates.io/api/v1/crates/cargo-llvm-cov) |
