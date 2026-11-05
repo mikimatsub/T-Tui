@@ -52,7 +52,7 @@ class ReleaseTests(unittest.TestCase):
         output_patch = contextlib.redirect_stdout(io.StringIO())
         output_patch.__enter__()
         self.addCleanup(output_patch.__exit__, None, None, None)
-        self.package = {'name': '@mikimatsub/ttui', 'version': '1.0.0-rc.1'}
+        self.package = {'name': 'ttui', 'version': '1.0.0-rc.1'}
         self.write_versions()
         self.write('npm/bin/ttui.mjs', b'// test launcher fixture\n')
         self.write('LICENSE', b'test license\n')

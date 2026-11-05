@@ -15,6 +15,8 @@ def main():
     npm = shutil.which('npm.cmd' if os.name == 'nt' else 'npm')
     assert npm, 'npm unavailable'
     packed = json.loads(run([npm, 'pack', '--json', '--ignore-scripts', '--pack-destination', str(ROOT / 'dist')], cwd=ROOT / 'target/npm-stage'))[0]
+    assert packed['name'] == 'ttui' and packed['version'] == version(), 'Unexpected npm package identity'
+    assert packed['filename'] == f'ttui-{version()}.tgz', 'Unexpected npm tarball name'
     names = {entry['path'] for entry in packed['files']}
     expected = {'package.json', 'LICENSE', 'CROSSTERM-LICENSE', 'THIRD_PARTY_NOTICES.txt', 'RUST-STDLIB-LICENSE.html', 'README.md', 'checksums.json', 'bin/ttui.mjs', 'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}
     assert names == expected, f'Unexpected package contents: {names ^ expected}'

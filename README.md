@@ -4,7 +4,7 @@
 
 <h3>A fast, keyboard-first Tinder client for Linux and Windows terminals.</h3>
 
-[![CI](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml) [![Security](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml) [![npm version](https://img.shields.io/npm/v/@mikimatsub/ttui.svg)](https://www.npmjs.com/package/@mikimatsub/ttui) [![GitHub release](https://img.shields.io/github/v/release/mikimatsub/T-Tui)](https://github.com/mikimatsub/T-Tui/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mikimatsub/T-Tui/blob/main/LICENSE) ![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows-8a63d2) ![Built with Rust](https://img.shields.io/badge/built%20with-Rust-dea584)
+[![CI](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/ci.yml) [![Security](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml/badge.svg)](https://github.com/mikimatsub/T-Tui/actions/workflows/security.yml) [![npm version](https://img.shields.io/npm/v/ttui.svg)](https://www.npmjs.com/package/ttui) [![GitHub release](https://img.shields.io/github/v/release/mikimatsub/T-Tui)](https://github.com/mikimatsub/T-Tui/releases) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/mikimatsub/T-Tui/blob/main/LICENSE) ![Platforms](https://img.shields.io/badge/platforms-Linux%20%7C%20Windows-8a63d2) ![Built with Rust](https://img.shields.io/badge/built%20with-Rust-dea584)
 
 [**Install**](#-install) · [**Features**](#-features) · [**Screenshots**](#-screenshots) · [**Keys**](#%EF%B8%8F-keyboard-shortcuts) · [**FAQ**](#-faq) · [**Releases**](https://github.com/mikimatsub/T-Tui/releases)
 
@@ -84,11 +84,13 @@ Every action has a key, and every bracketed button is clickable. The wheel scrol
 ### npm (Linux and Windows, x86-64)
 
 ```sh
-npm install --global @mikimatsub/ttui
+npm install --global ttui
 ttui --mock
 ```
 
-The package bundles both native binaries. It has no dependencies, no install scripts and no runtime download. Requires Node >=24.21.0.
+The package bundles both native binaries. It has no dependencies, no install scripts and no runtime download. Requires Node >=24.21.0; CI tests Node 24 and 26 on Linux and Windows.
+
+Starting with 1.1.0, the npm package is named `ttui` (previously `@mikimatsub/ttui`); the command remains `ttui`. Existing scoped installs can migrate with `npm uninstall --global @mikimatsub/ttui` followed by the install above. Until the first `ttui` publication is complete, use the standalone binary below.
 
 ### Standalone binary (no Node or Rust needed)
 
