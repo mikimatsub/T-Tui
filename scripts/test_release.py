@@ -52,7 +52,7 @@ class ReleaseTests(unittest.TestCase):
         output_patch = contextlib.redirect_stdout(io.StringIO())
         output_patch.__enter__()
         self.addCleanup(output_patch.__exit__, None, None, None)
-        self.package = {'name': 'ttui', 'version': '1.0.0-rc.1'}
+        self.package = {'name': 'tindtui', 'version': '1.0.0-rc.1', 'bin': {'ttui': 'bin/ttui.mjs'}}
         self.write_versions()
         self.write('npm/bin/ttui.mjs', b'// test launcher fixture\n')
         self.write('LICENSE', b'test license\n')
@@ -189,7 +189,10 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual((self.output / 'CROSSTERM-LICENSE').read_bytes(), b'test vendored license\n')
         self.assertEqual((self.output / 'THIRD_PARTY_NOTICES.txt').read_bytes(), b'test dependency notices\n')
         self.assertEqual((self.output / 'RUST-STDLIB-LICENSE.html').read_bytes(), b'test Rust notices\n')
-        self.assertEqual(json.loads((self.output / 'package.json').read_text())['version'], '1.0.0-rc.1')
+        staged = json.loads((self.output / 'package.json').read_text())
+        self.assertEqual(staged['name'], 'tindtui')
+        self.assertEqual(staged['version'], '1.0.0-rc.1')
+        self.assertEqual(staged['bin'], {'ttui': 'bin/ttui.mjs'})
         self.assertFalse((self.root / 'outside.txt').exists())
         self.assertFalse((self.output / 'unrelated').exists())
 

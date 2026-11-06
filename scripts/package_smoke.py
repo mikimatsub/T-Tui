@@ -15,14 +15,17 @@ def main():
     npm = shutil.which('npm.cmd' if os.name == 'nt' else 'npm')
     assert npm, 'npm unavailable'
     packed = json.loads(run([npm, 'pack', '--json', '--ignore-scripts', '--pack-destination', str(ROOT / 'dist')], cwd=ROOT / 'target/npm-stage'))[0]
-    assert packed['name'] == 'ttui' and packed['version'] == version(), 'Unexpected npm package identity'
-    assert packed['filename'] == f'ttui-{version()}.tgz', 'Unexpected npm tarball name'
+    assert packed['name'] == 'tindtui' and packed['version'] == version(), 'Unexpected npm package identity'
+    assert packed['filename'] == f'tindtui-{version()}.tgz', 'Unexpected npm tarball name'
     names = {entry['path'] for entry in packed['files']}
     expected = {'package.json', 'LICENSE', 'CROSSTERM-LICENSE', 'THIRD_PARTY_NOTICES.txt', 'RUST-STDLIB-LICENSE.html', 'README.md', 'checksums.json', 'bin/ttui.mjs', 'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}
     assert names == expected, f'Unexpected package contents: {names ^ expected}'
     tarball = ROOT / 'dist' / packed['filename']
     with tarfile.open(tarball) as archive:
         import hashlib
+        manifest = json.load(archive.extractfile('package/package.json'))
+        assert manifest['name'] == 'tindtui' and manifest['bin'] == {'ttui': 'bin/ttui.mjs'}, 'Packaged name or ttui command changed'
+        assert 'scripts' not in manifest, 'Package must not add lifecycle scripts'
         hashes = json.load(archive.extractfile('package/checksums.json'))
         assert set(hashes) == {'bin/linux-x64/ttui', 'bin/win32-x64/ttui.exe'}, 'Missing binary checksums'
         for path, sha in hashes.items():

@@ -6,7 +6,7 @@
 
 ### Changed
 
-- npm package renamed from `@mikimatsub/ttui` to `ttui`. Install with `npm install -g ttui`.
+- npm package renamed from `@mikimatsub/ttui` to `tindtui`. Install with `npm install -g tindtui`, then run `ttui`. The command name is unchanged. npm did not accept the unscoped name `ttui`; that name was never published.
 - CI now tests Node 24 and Node 26. Package engines remain `>=24.21.0`.
 
 ### Docs
