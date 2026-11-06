@@ -23,7 +23,7 @@ def main():
         root = Path(temp)
         archives = [f'ttui-{v}-{target}.{ "zip" if platform == "win32-x64" else "tar.gz" }'
                     for platform, target in TARGETS.items()]
-        tarball = f'ttui-{v}.tgz'
+        tarball = f'tindtui-{v}.tgz'
         for name in archives + [name + '.sha256' for name in archives] + [tarball]:
             # Public asset requests deliberately contain no Authorization header.
             url = f'https://github.com/{repo}/releases/download/{tag}/{name}'
