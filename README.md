@@ -90,7 +90,7 @@ ttui --mock
 
 The npm package is named `tindtui`. The command remains `ttui`, so shell aliases and config do not change. It bundles both native binaries. It has no dependencies, no install scripts and no runtime download. Requires Node >=24.21.0; CI tests Node 24 and 26 on Linux and Windows.
 
-Starting with 1.1.0, this replaces `@mikimatsub/ttui`. Migrate a global install with `npm uninstall -g @mikimatsub/ttui`, then `npm install -g tindtui`. Until the first `tindtui` publication is complete, use the standalone binary below.
+Starting with 1.1.0, this replaces `@mikimatsub/ttui`. Migrate a global install with `npm uninstall -g @mikimatsub/ttui`, then `npm install -g tindtui`.
 
 ### Standalone binary (no Node or Rust needed)
 
